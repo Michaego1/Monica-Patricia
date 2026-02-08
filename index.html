@@ -104,7 +104,6 @@
     .num{font-size: 22px; font-weight:950;}
     .lab{font-size:12px; color: var(--muted); margin-top:4px;}
 
-    /* Botón música */
     .musicbar{
       display:flex; gap:10px; align-items:center; justify-content:space-between;
       padding:12px; border-radius:18px;
@@ -121,7 +120,6 @@
       padding:10px 14px;
     }
 
-    /* Modal */
     .modal{position:fixed; inset:0; display:none; place-items:center; background: rgba(0,0,0,.55); z-index:10; padding:14px;}
     .modal.open{display:grid}
     .modal .box{
@@ -133,6 +131,7 @@
       padding:18px;
       position:relative;
       overflow:hidden;
+      text-align:center;
     }
     .spark{
       position:absolute; inset:-60px -80px auto auto;
@@ -143,11 +142,14 @@
     }
     .box h3{margin:0 0 8px; font-size:20px}
     .box p{margin:0 0 14px; color: var(--muted); line-height:1.7}
-    .box .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;}
+    .box .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;}
     .close{
       background: rgba(0,0,0,.25);
       border:1px solid rgba(255,255,255,.12);
       color:white;
+      padding:12px 16px;
+      border-radius:999px;
+      font-weight:900;
     }
 
     /* iframe oculto (solo audio) */
@@ -186,16 +188,14 @@
           <div class="musicbar">
             <div class="info">
               🎵 Música: <b>palacio</b><br/>
-              <span style="color:rgba(255,255,255,.7)">Toca para reproducir.</span>
+              <span style="color:rgba(255,255,255,.7)">Reproducir / Pausar</span>
             </div>
             <button class="musicbtn" id="btnMusic">▶ Reproducir</button>
           </div>
 
           <div class="question">
             <h2>¿Aceptás ser mi San Valentín… y mi elección de cada año? 🫶</h2>
-            <p>
-              Prometo elegirte hoy, mañana, y cada año que venga.
-            </p>
+            <p>Prometo elegirte hoy, mañana, y cada año que venga.</p>
 
             <div class="actions" id="actions">
               <button class="yes" id="btnYes">Sí, acepto 💍</button>
@@ -222,14 +222,50 @@
     </main>
   </div>
 
+  <!-- Overlay para habilitar música en móviles -->
+  <div id="startOverlay" style="
+    position:fixed; inset:0; z-index:20;
+    display:grid; place-items:center;
+    background: rgba(0,0,0,.72);
+    backdrop-filter: blur(10px);
+    padding:18px;
+  ">
+    <div style="
+      width:min(560px, 100%);
+      background: rgba(18,0,19,.92);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      padding:18px;
+      text-align:center;
+    ">
+      <div style="font-size:26px; font-weight:900; margin-bottom:6px;">💖</div>
+      <div style="font-size:18px; font-weight:900; margin-bottom:8px;">
+        Para Mónica Patricia
+      </div>
+      <div style="color: rgba(255,255,255,.78); line-height:1.6; margin-bottom:14px; font-size:14px;">
+        Toca para entrar y escuchar la canción.
+      </div>
+      <button id="btnStart" style="
+        border:0;
+        padding:12px 16px;
+        border-radius:999px;
+        font-weight:900;
+        cursor:pointer;
+        background: linear-gradient(135deg, #ff2e63, #ff7aa2);
+        color:white;
+        box-shadow: 0 18px 40px rgba(255,46,99,.25);
+        width:100%;
+      ">Entrar ✨</button>
+    </div>
+  </div>
+
   <!-- Modal -->
   <div class="modal" id="modal" aria-hidden="true">
     <div class="box" role="dialog" aria-modal="true" aria-label="Mensaje de amor">
       <div class="spark"></div>
       <h3>💖</h3>
-      <p id="modalText">
-        Gracias por decir que sí. Te elijo hoy, mañana y siempre.
-      </p>
+      <p id="modalText">Gracias por decir que sí. Te elijo hoy, mañana y siempre.</p>
       <div class="row">
         <button class="close" id="btnClose">Cerrar ✨</button>
       </div>
@@ -241,7 +277,7 @@
     const NOMBRE = "Mónica Patricia";
 
     // YouTube video ID para "Elsa y Elmar - palacio"
-    // Fuente: https://www.youtube.com/watch?v=Vk-A6jLTOmM
+    // https://www.youtube.com/watch?v=Vk-A6jLTOmM
     const YT_VIDEO_ID = "Vk-A6jLTOmM";
 
     // DOM
@@ -279,7 +315,7 @@
     function getNextValentines(){
       const now = new Date();
       const y = now.getFullYear();
-      let target = new Date(y, 1, 14, 0, 0, 0); // Feb = 1
+      let target = new Date(y, 1, 14, 0, 0, 0);
       if(now > target) target = new Date(y+1, 1, 14, 0, 0, 0);
       return target;
     }
@@ -332,14 +368,12 @@
     const modalText = document.getElementById("modalText");
     const btnClose = document.getElementById("btnClose");
 
-    btnYes.addEventListener("click", ()=>{
+    btnYes.addEventListener("click", async ()=>{
       modalText.textContent = "Gracias por decir que sí. Te elijo hoy, mañana y siempre. 🌹💖";
       modal.classList.add("open");
       modal.setAttribute("aria-hidden","false");
       for(let i=0;i<30;i++) setTimeout(spawnHeart, i*60);
-
-      // Intentar iniciar música cuando presione "Sí"
-      startMusic();
+      await startMusic();
     });
 
     btnClose.addEventListener("click", ()=>{
@@ -348,7 +382,7 @@
     });
     modal.addEventListener("click", (e)=>{ if(e.target === modal) btnClose.click(); });
 
-    // ===== YouTube IFrame API (audio) =====
+    // ===== YouTube IFrame API =====
     let player = null;
     let isPlaying = false;
     const btnMusic = document.getElementById("btnMusic");
@@ -377,12 +411,8 @@
           modestbranding: 1
         },
         events: {
-          onReady: () => {
-            // volumen inicial
-            try { player.setVolume(70); } catch {}
-          },
+          onReady: () => { try { player.setVolume(70); } catch {} },
           onStateChange: (e) => {
-            // 1 = playing, 2 = paused
             if (e.data === 1) { isPlaying = true; btnMusic.textContent = "⏸ Pausar"; }
             if (e.data === 2) { isPlaying = false; btnMusic.textContent = "▶ Reproducir"; }
           }
@@ -392,75 +422,33 @@
 
     async function startMusic(){
       await initPlayer();
-      try {
-        player.playVideo();
-      } catch {}
+      try { player.playVideo(); } catch {}
     }
     async function pauseMusic(){
       if (!player) return;
       try { player.pauseVideo(); } catch {}
     }
+
     btnMusic.addEventListener("click", async ()=>{
       await initPlayer();
-      if (!isPlaying) startMusic();
-      else pauseMusic();
+      if (!isPlaying) await startMusic();
+      else await pauseMusic();
     });
-    // ===== Inicio con un toque (para habilitar audio en móviles) =====
-const startOverlay = document.getElementById("startOverlay");
-const btnStart = document.getElementById("btnStart");
 
-async function enterSite(){
-  // inicia música con gesto del usuario (permitido)
-  await startMusic();
-  // quitar overlay
-  startOverlay.style.display = "none";
-}
+    // ===== Overlay de entrada (habilita audio en móviles) =====
+    const startOverlay = document.getElementById("startOverlay");
+    const btnStart = document.getElementById("btnStart");
 
-// botón entrar
-btnStart.addEventListener("click", enterSite);
+    async function enterSite(){
+      await startMusic();
+      startOverlay.style.display = "none";
+    }
 
-// fallback: tocar en cualquier lado del overlay
-startOverlay.addEventListener("click", (e)=>{
-  // evita doble click si ya tocó el botón
-  if (e.target.id === "btnStart") return;
-  enterSite();
-}, { once:true });
+    btnStart.addEventListener("click", enterSite);
+    startOverlay.addEventListener("click", (e)=>{
+      if (e.target.id === "btnStart") return;
+      enterSite();
+    }, { once:true });
   </script>
-  <div id="startOverlay" style="
-  position:fixed; inset:0; z-index:20;
-  display:grid; place-items:center;
-  background: rgba(0,0,0,.72);
-  backdrop-filter: blur(10px);
-  padding:18px;
-">
-  <div style="
-    width:min(560px, 100%);
-    background: rgba(18,0,19,.92);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:22px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.45);
-    padding:18px;
-    text-align:center;
-  ">
-    <div style="font-size:26px; font-weight:900; margin-bottom:6px;">💖</div>
-    <div style="font-size:18px; font-weight:900; margin-bottom:8px;">
-      Para Mónica Patricia
-    </div>
-    <div style="color: rgba(255,255,255,.78); line-height:1.6; margin-bottom:14px; font-size:14px;">
-      Toca para iniciar 
-    </div>
-    <button id="btnStart" style="
-      border:0;
-      padding:12px 16px;
-      border-radius:999px;
-      font-weight:900;
-      cursor:pointer;
-      background: linear-gradient(135deg, #ff2e63, #ff7aa2);
-      color:white;
-      box-shadow: 0 18px 40px rgba(255,46,99,.25);
-      width:100%;
-    ">Entrar ✨</button>
-  </div>
-  </div>
 </body>
 </html>
