@@ -405,6 +405,62 @@
       if (!isPlaying) startMusic();
       else pauseMusic();
     });
+    // ===== Inicio con un toque (para habilitar audio en móviles) =====
+const startOverlay = document.getElementById("startOverlay");
+const btnStart = document.getElementById("btnStart");
+
+async function enterSite(){
+  // inicia música con gesto del usuario (permitido)
+  await startMusic();
+  // quitar overlay
+  startOverlay.style.display = "none";
+}
+
+// botón entrar
+btnStart.addEventListener("click", enterSite);
+
+// fallback: tocar en cualquier lado del overlay
+startOverlay.addEventListener("click", (e)=>{
+  // evita doble click si ya tocó el botón
+  if (e.target.id === "btnStart") return;
+  enterSite();
+}, { once:true });
   </script>
+  <div id="startOverlay" style="
+  position:fixed; inset:0; z-index:20;
+  display:grid; place-items:center;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(10px);
+  padding:18px;
+">
+  <div style="
+    width:min(560px, 100%);
+    background: rgba(18,0,19,.92);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:22px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    padding:18px;
+    text-align:center;
+  ">
+    <div style="font-size:26px; font-weight:900; margin-bottom:6px;">💖</div>
+    <div style="font-size:18px; font-weight:900; margin-bottom:8px;">
+      Para Mónica Patricia
+    </div>
+    <div style="color: rgba(255,255,255,.78); line-height:1.6; margin-bottom:14px; font-size:14px;">
+      Toca para iniciar 
+    </div>
+    <button id="btnStart" style="
+      border:0;
+      padding:12px 16px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+      background: linear-gradient(135deg, #ff2e63, #ff7aa2);
+      color:white;
+      box-shadow: 0 18px 40px rgba(255,46,99,.25);
+      width:100%;
+    ">Entrar ✨</button>
+  </div>
+  </div>
 </body>
 </html>
