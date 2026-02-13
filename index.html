@@ -1,454 +1,149 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Para Monica Patricia 💖</title>
-  <meta name="theme-color" content="#b1002f" />
-  <style>
-    :root{
-      --bg1:#120013; --bg2:#2a0018;
-      --card: rgba(255,255,255,.08);
-      --txt:#fff; --muted: rgba(255,255,255,.78);
-      --accent:#ff2e63; --accent2:#ff7aa2; --gold:#ffd7a8;
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
-      --radius: 22px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--txt);
-      min-height:100vh;
-      overflow-x:hidden;
-      background:
-        radial-gradient(1200px 800px at 20% 10%, rgba(255,46,99,.25), transparent 60%),
-        radial-gradient(900px 700px at 80% 30%, rgba(255,122,162,.18), transparent 60%),
-        linear-gradient(160deg, var(--bg1), var(--bg2));
-    }
-    .hearts{position:fixed; inset:0; pointer-events:none; overflow:hidden; opacity:.9; z-index:0;}
-    .heart{
-      position:absolute; bottom:-60px; font-size:18px;
-      filter: drop-shadow(0 6px 14px rgba(255,46,99,.35));
-      animation: floatUp linear forwards;
-    }
-    @keyframes floatUp{
-      to{transform: translateY(-120vh) translateX(var(--drift)); opacity:0;}
-    }
-    .wrap{position:relative; z-index:1; display:flex; align-items:center; justify-content:center; padding:28px 14px; min-height:100vh;}
-    .card{
-      width:min(760px, 100%);
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.12);
-      backdrop-filter: blur(14px);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
-      overflow:hidden;
-    }
-    .top{display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
-    .badge{
-      display:inline-flex; gap:10px; align-items:center;
-      padding:10px 14px; border-radius:999px;
-      background: rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.12);
-      color: var(--muted); font-size:13px;
-    }
-    .badge b{color:var(--gold)}
-    .title{margin:14px 0 8px; font-size: clamp(26px, 4.5vw, 40px); line-height:1.1;}
-    .subtitle{margin:0 0 12px; color: var(--muted); font-size: 15px; line-height:1.6;}
-    .hero{margin-top:14px; display:grid; grid-template-columns: 1.2fr .8fr; gap:14px;}
-    @media (max-width:720px){ .hero{grid-template-columns:1fr} }
-    .panel{
-      border-radius: 18px;
-      background: rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.10);
-      padding:16px;
-    }
-    .quote{font-size: 16px; line-height:1.7; color: rgba(255,255,255,.92); margin:0;}
-    .quote .hl{
-      color:#fff; font-weight:900;
-      background: linear-gradient(90deg, rgba(255,46,99,.35), rgba(255,122,162,.18));
-      padding:2px 8px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.12);
-    }
-    .question{
-      margin-top:16px; padding:16px; border-radius:18px;
-      background: linear-gradient(135deg, rgba(255,46,99,.18), rgba(255,215,168,.08));
-      border:1px solid rgba(255,255,255,.14);
-    }
-    .question h2{margin:0 0 8px; font-size: 18px;}
-    .question p{margin:0; color: var(--muted); line-height:1.6; font-size:14px;}
-    .actions{position:relative; display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:14px; min-height:64px;}
-    button{
-      border:0; padding:12px 16px; border-radius: 999px; font-weight:900;
-      cursor:pointer; transition: transform .08s ease, filter .2s ease; user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .yes{background: linear-gradient(135deg, var(--accent), var(--accent2)); color:white; box-shadow: 0 18px 40px rgba(255,46,99,.25);}
-    .yes:active{transform: scale(.98)}
-    .no{
-      background: rgba(255,255,255,.10);
-      color: rgba(255,255,255,.92);
-      border:1px solid rgba(255,255,255,.14);
-      position:relative;
-    }
-    .no:active{transform: scale(.98)}
-    .footer{
-      margin-top:14px; display:flex; align-items:center; justify-content:space-between;
-      gap:12px; flex-wrap:wrap; color: rgba(255,255,255,.62); font-size:12px;
-    }
-    .pill{padding:6px 10px; border-radius:999px; background: rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.10);}
-    .countdown{display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-top:12px;}
-    .tile{border-radius: 16px; background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); padding:12px 10px; text-align:center;}
-    .num{font-size: 22px; font-weight:950;}
-    .lab{font-size:12px; color: var(--muted); margin-top:4px;}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para Mónica Patricia 💌</title>
 
-    .musicbar{
-      display:flex; gap:10px; align-items:center; justify-content:space-between;
-      padding:12px; border-radius:18px;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.12);
-      margin-top:12px;
-    }
-    .musicbar .info{font-size:13px; color:rgba(255,255,255,.85); line-height:1.4}
-    .musicbtn{
-      background: rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.16);
-      color:#fff;
-      font-weight:900;
-      padding:10px 14px;
-    }
+<style>
+body{
+  margin:0;
+  font-family: 'Georgia', serif;
+  background: linear-gradient(135deg,#2a0018,#120013);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  color:white;
+  overflow:hidden;
+}
 
-    .modal{position:fixed; inset:0; display:none; place-items:center; background: rgba(0,0,0,.55); z-index:10; padding:14px;}
-    .modal.open{display:grid}
-    .modal .box{
-      width:min(560px, 100%);
-      background: rgba(18,0,19,.92);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      padding:18px;
-      position:relative;
-      overflow:hidden;
-      text-align:center;
-    }
-    .spark{
-      position:absolute; inset:-60px -80px auto auto;
-      width:240px; height:240px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,215,168,.55), transparent 55%),
-                  radial-gradient(circle at 70% 70%, rgba(255,46,99,.45), transparent 55%);
-      filter: blur(2px); opacity:.8; transform: rotate(12deg);
-    }
-    .box h3{margin:0 0 8px; font-size:20px}
-    .box p{margin:0 0 14px; color: var(--muted); line-height:1.7}
-    .box .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;}
-    .close{
-      background: rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.12);
-      color:white;
-      padding:12px 16px;
-      border-radius:999px;
-      font-weight:900;
-    }
+/* SOBRE */
+.envelope-wrapper{
+  position:relative;
+  width:320px;
+  height:220px;
+  cursor:pointer;
+  transition: transform .5s ease;
+}
 
-    /* iframe oculto (solo audio) */
-    #ytwrap{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
-  </style>
+.envelope{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#f3d8b6;
+  border-radius:8px;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
+
+.flap{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#e7c39c;
+  clip-path: polygon(0 0, 50% 55%, 100% 0);
+  transform-origin: top;
+  transition: transform 1s ease;
+}
+
+.seal{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:26px;
+}
+
+/* CARTA INTERNA */
+.letter{
+  position:absolute;
+  width:300px;
+  background:white;
+  color:#333;
+  padding:25px;
+  border-radius:6px;
+  text-align:center;
+  line-height:1.7;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  transform: translateY(120%);
+  transition: transform 1.2s ease;
+}
+
+.open .flap{
+  transform: rotateX(180deg);
+}
+
+.open .letter{
+  transform: translateY(-140%);
+}
+
+.countdown{
+  position:absolute;
+  bottom:40px;
+  font-size:18px;
+  text-align:center;
+}
+</style>
 </head>
+
 <body>
-  <div class="hearts" id="hearts"></div>
 
-  <!-- Player oculto -->
-  <div id="ytwrap">
-    <div id="ytplayer"></div>
+<div id="envelopeContainer">
+  <div class="envelope-wrapper" id="envelope">
+    <div class="envelope"></div>
+    <div class="flap"></div>
+    <div class="seal">💌</div>
   </div>
 
-  <div class="wrap">
-    <main class="card" role="main">
-      <div class="top">
-        <div class="badge">🌹 Para <b id="name">Monica Patricia</b></div>
-        <div class="badge">💌 Nuestro primer San Valentín</div>
-      </div>
-
-      <h1 class="title">Te amo, <span style="color:var(--gold)">Monica Patricia</span> 💖</h1>
-      <p class="subtitle">
-        Este será nuestro primer San Valentín…
-        y quiero decirte algo con todo mi corazón: cada año te voy a elegir a ti.
-      </p>
-
-      <section class="hero">
-        <div class="panel">
-          <p class="quote">
-            Quiero que seas <span class="hl">la primera y la última</span>:
-            la persona con la que celebre la vida, los sueños y todo lo que venga.
-            Porque mi “para siempre” tiene tu nombre.
-          </p>
-
-          <div class="musicbar">
-            <div class="info">
-              🎵 Música: <b>palacio</b><br/>
-              <span style="color:rgba(255,255,255,.7)">Reproducir / Pausar</span>
-            </div>
-            <button class="musicbtn" id="btnMusic">▶ Reproducir</button>
-          </div>
-
-          <div class="question">
-            <h2>¿Aceptás ser mi San Valentín… y mi elección de cada año? 🫶</h2>
-            <p>Prometo elegirte hoy, mañana, y cada año que venga.</p>
-
-            <div class="actions" id="actions">
-              <button class="yes" id="btnYes">Sí, acepto 💍</button>
-              <button class="no" id="btnNo">No 🙈</button>
-            </div>
-          </div>
-
-          <div class="footer">
-            <span class="pill">🕊️ Eres mi sueño cumplido</span>
-            <span class="pill" id="valDayText">⏳ Calculando…</span>
-          </div>
-        </div>
-
-        <aside class="panel">
-          <div class="badge" style="margin-bottom:10px">⏰ Cuenta regresiva al 14 de febrero</div>
-          <div class="countdown" aria-label="Cuenta regresiva">
-            <div class="tile"><div class="num" id="d">--</div><div class="lab">Días</div></div>
-            <div class="tile"><div class="num" id="h">--</div><div class="lab">Horas</div></div>
-            <div class="tile"><div class="num" id="m">--</div><div class="lab">Min</div></div>
-            <div class="tile"><div class="num" id="s">--</div><div class="lab">Seg</div></div>
-          </div>
-        </aside>
-      </section>
-    </main>
+  <div class="letter" id="letter">
+    <h2>Para Mónica Patricia 💖</h2>
+    <p>
+      Este es nuestro primer San Valentín…
+      y quiero que seas la primera y la última.
+    </p>
+    <p>
+      Cada año te voy a elegir a ti.
+      Hoy, mañana y siempre.
+    </p>
+    <p><b>¿Aceptás ser mi San Valentín? 💍</b></p>
   </div>
+</div>
 
-  <!-- Overlay para habilitar música en móviles -->
-  <div id="startOverlay" style="
-    position:fixed; inset:0; z-index:20;
-    display:grid; place-items:center;
-    background: rgba(0,0,0,.72);
-    backdrop-filter: blur(10px);
-    padding:18px;
-  ">
-    <div style="
-      width:min(560px, 100%);
-      background: rgba(18,0,19,.92);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:22px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-      padding:18px;
-      text-align:center;
-    ">
-      <div style="font-size:26px; font-weight:900; margin-bottom:6px;">💖</div>
-      <div style="font-size:18px; font-weight:900; margin-bottom:8px;">
-        Para Monica Patricia
-      </div>
-      <div style="color: rgba(255,255,255,.78); line-height:1.6; margin-bottom:14px; font-size:14px;">
-        Toca para entrar.
-      </div>
-      <button id="btnStart" style="
-        border:0;
-        padding:12px 16px;
-        border-radius:999px;
-        font-weight:900;
-        cursor:pointer;
-        background: linear-gradient(135deg, #ff2e63, #ff7aa2);
-        color:white;
-        box-shadow: 0 18px 40px rgba(255,46,99,.25);
-        width:100%;
-      ">Entrar ✨</button>
-    </div>
-  </div>
+<div class="countdown" id="countdownText">
+  Se abrirá el 14 de febrero a las 00:00 💫
+</div>
 
-  <!-- Modal -->
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="box" role="dialog" aria-modal="true" aria-label="Mensaje de amor">
-      <div class="spark"></div>
-      <h3>💖</h3>
-      <p id="modalText">Gracias por decir que sí. Te elijo hoy, mañana y siempre.</p>
-      <div class="row">
-        <button class="close" id="btnClose">Cerrar ✨</button>
-      </div>
-    </div>
-  </div>
+<script>
+const target = new Date(new Date().getFullYear(), 1, 14, 0, 0, 0);
+if(new Date() > target){
+  target.setFullYear(target.getFullYear() + 1);
+}
 
-  <script>
-    // CONFIG
-    const NOMBRE = "Monica Patricia";
+const envelope = document.getElementById("envelopeContainer");
+const countdownText = document.getElementById("countdownText");
 
-    // YouTube video ID para "Elsa y Elmar - palacio"
-    // https://www.youtube.com/watch?v=Vk-A6jLTOmM
-    const YT_VIDEO_ID = "Vk-A6jLTOmM";
+function updateCountdown(){
+  const now = new Date();
+  const diff = target - now;
 
-    // DOM
-    document.getElementById("name").textContent = NOMBRE;
+  if(diff <= 0){
+    envelope.classList.add("open");
+    countdownText.style.display = "none";
+    clearInterval(timer);
+    return;
+  }
 
-    // Corazones
-    const hearts = document.getElementById("hearts");
-    const heartChars = ["❤","💖","💘","💗","🌹","💕"];
-    function spawnHeart(){
-      const el = document.createElement("div");
-      el.className = "heart";
-      el.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
-      const left = Math.random()*100;
-      const size = 14 + Math.random()*22;
-      const dur  = 5 + Math.random()*6;
-      const drift = (Math.random()*120 - 60).toFixed(0) + "px";
-      el.style.left = left + "vw";
-      el.style.fontSize = size + "px";
-      el.style.animationDuration = dur + "s";
-      el.style.setProperty("--drift", drift);
-      el.style.opacity = (0.6 + Math.random()*0.4).toFixed(2);
-      hearts.appendChild(el);
-      setTimeout(()=> el.remove(), dur*1000);
-    }
-    setInterval(spawnHeart, 420);
-    for(let i=0;i<10;i++) setTimeout(spawnHeart, i*180);
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-    // Cuenta regresiva a 14 Feb (año actual o siguiente)
-    const elD = document.getElementById("d");
-    const elH = document.getElementById("h");
-    const elM = document.getElementById("m");
-    const elS = document.getElementById("s");
-    const elTxt = document.getElementById("valDayText");
+  countdownText.innerHTML =
+    `Se abrirá en ${hours}h ${minutes}m ${seconds}s 💫`;
+}
 
-    function getNextValentines(){
-      const now = new Date();
-      const y = now.getFullYear();
-      let target = new Date(y, 1, 14, 0, 0, 0);
-      if(now > target) target = new Date(y+1, 1, 14, 0, 0, 0);
-      return target;
-    }
-    const targetDate = getNextValentines();
+const timer = setInterval(updateCountdown, 1000);
+updateCountdown();
+</script>
 
-    function pad(n){ return String(n).padStart(2,"0"); }
-    function tick(){
-      const now = new Date();
-      let diff = targetDate - now;
-      if(diff < 0) diff = 0;
-
-      const sec = Math.floor(diff/1000);
-      const days = Math.floor(sec/86400);
-      const hrs = Math.floor((sec%86400)/3600);
-      const min = Math.floor((sec%3600)/60);
-      const s = sec%60;
-
-      elD.textContent = days;
-      elH.textContent = pad(hrs);
-      elM.textContent = pad(min);
-      elS.textContent = pad(s);
-
-      const opts = { day:"2-digit", month:"long", year:"numeric" };
-      elTxt.textContent = "📅 " + targetDate.toLocaleDateString("es-GT", opts);
-    }
-    setInterval(tick, 1000);
-    tick();
-
-    // Botón NO que se mueve
-    const btnNo = document.getElementById("btnNo");
-    const actions = document.getElementById("actions");
-    function moveNo(){
-      const rect = actions.getBoundingClientRect();
-      const bw = btnNo.offsetWidth;
-      const bh = btnNo.offsetHeight;
-      const maxX = Math.max(0, rect.width - bw);
-      const maxY = Math.max(0, rect.height - bh);
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
-      btnNo.style.position = "absolute";
-      btnNo.style.left = x + "px";
-      btnNo.style.top = y + "px";
-    }
-    btnNo.addEventListener("mouseenter", moveNo);
-    btnNo.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveNo(); }, {passive:false});
-
-    // Modal
-    const btnYes = document.getElementById("btnYes");
-    const modal = document.getElementById("modal");
-    const modalText = document.getElementById("modalText");
-    const btnClose = document.getElementById("btnClose");
-
-    btnYes.addEventListener("click", async ()=>{
-      modalText.textContent = "Gracias por decir que sí. Te elijo hoy, mañana y siempre. 🌹💖";
-      modal.classList.add("open");
-      modal.setAttribute("aria-hidden","false");
-      for(let i=0;i<30;i++) setTimeout(spawnHeart, i*60);
-      await startMusic();
-    });
-
-    btnClose.addEventListener("click", ()=>{
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden","true");
-    });
-    modal.addEventListener("click", (e)=>{ if(e.target === modal) btnClose.click(); });
-
-    // ===== YouTube IFrame API =====
-    let player = null;
-    let isPlaying = false;
-    const btnMusic = document.getElementById("btnMusic");
-
-    function loadYouTubeApi(){
-      return new Promise((resolve) => {
-        if (window.YT && window.YT.Player) return resolve();
-        const tag = document.createElement("script");
-        tag.src = "https://www.youtube.com/iframe_api";
-        window.onYouTubeIframeAPIReady = () => resolve();
-        document.head.appendChild(tag);
-      });
-    }
-
-    async function initPlayer(){
-      if (player) return;
-      await loadYouTubeApi();
-      player = new YT.Player("ytplayer", {
-        height: "1",
-        width: "1",
-        videoId: YT_VIDEO_ID,
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          rel: 0,
-          modestbranding: 1
-        },
-        events: {
-          onReady: () => { try { player.setVolume(70); } catch {} },
-          onStateChange: (e) => {
-            if (e.data === 1) { isPlaying = true; btnMusic.textContent = "⏸ Pausar"; }
-            if (e.data === 2) { isPlaying = false; btnMusic.textContent = "▶ Reproducir"; }
-          }
-        }
-      });
-    }
-
-    async function startMusic(){
-      await initPlayer();
-      try { player.playVideo(); } catch {}
-    }
-    async function pauseMusic(){
-      if (!player) return;
-      try { player.pauseVideo(); } catch {}
-    }
-
-    btnMusic.addEventListener("click", async ()=>{
-      await initPlayer();
-      if (!isPlaying) await startMusic();
-      else await pauseMusic();
-    });
-
-    // ===== Overlay de entrada (habilita audio en móviles) =====
-    const startOverlay = document.getElementById("startOverlay");
-    const btnStart = document.getElementById("btnStart");
-
-    async function enterSite(){
-      await startMusic();
-      startOverlay.style.display = "none";
-    }
-
-    btnStart.addEventListener("click", enterSite);
-    startOverlay.addEventListener("click", (e)=>{
-      if (e.target.id === "btnStart") return;
-      enterSite();
-    }, { once:true });
-  </script>
 </body>
 </html>
