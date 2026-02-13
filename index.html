@@ -4,146 +4,565 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Para Mónica Patricia 💌</title>
+<meta name="theme-color" content="#120013" />
 
 <style>
-body{
-  margin:0;
-  font-family: 'Georgia', serif;
-  background: linear-gradient(135deg,#2a0018,#120013);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-  color:white;
-  overflow:hidden;
-}
+  :root{
+    --bgA: radial-gradient(circle at center, #3b0a1e, #120013);
+    --bgB: radial-gradient(circle at 30% 20%, #2b0014, #120013 55%, #050006);
+    --bgC: radial-gradient(circle at 40% 25%, #6b0f2c, #170014 55%, #030003);
+    --paper: #fdf5e6;
+    --ink: #3b2b20;
+  }
+  body{
+    margin:0;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: var(--bgA);
+    color:#fff;
+    font-family: "Georgia", serif;
+    transition: background 1.2s ease;
+  }
+  .wrapper{
+    text-align:center;
+    position:relative;
+    width:min(920px, 92vw);
+    padding:14px;
+  }
 
-/* SOBRE */
-.envelope-wrapper{
-  position:relative;
-  width:320px;
-  height:220px;
-  cursor:pointer;
-  transition: transform .5s ease;
-}
+  /* SOBRE */
+  .envelope-area{
+    position:relative;
+    width:360px;
+    height:250px;
+    margin: 0 auto;
+    transform: translateZ(0);
+  }
+  .envelope{
+    width:100%;
+    height:100%;
+    background:#e7c39c;
+    border-radius:10px;
+    box-shadow:0 22px 70px rgba(0,0,0,.55);
+    position:absolute;
+    left:0; top:0;
+  }
+  .flap{
+    position:absolute;
+    left:0; top:0;
+    width:100%; height:100%;
+    background:#d9b184;
+    clip-path: polygon(0 0, 50% 62%, 100% 0);
+    transform-origin: top;
+    transition: transform 1.35s ease;
+    border-radius:10px;
+  }
+  .seal{
+    position:absolute;
+    left:50%; top:56%;
+    transform:translate(-50%,-50%);
+    width:58px; height:58px;
+    border-radius:999px;
+    background: radial-gradient(circle at 30% 30%, #ff7aa2, #b1002f 70%);
+    box-shadow: 0 14px 30px rgba(0,0,0,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    user-select:none;
+  }
 
-.envelope{
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:#f3d8b6;
-  border-radius:8px;
-  box-shadow:0 20px 40px rgba(0,0,0,.4);
-}
+  /* TEXTO SOBRE (fase 8pm) */
+  .stamp-text{
+    position:absolute;
+    left:50%; top:16%;
+    transform:translateX(-50%);
+    background: rgba(0,0,0,.18);
+    border:1px solid rgba(255,255,255,.18);
+    padding:8px 12px;
+    border-radius:999px;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:.2px;
+    display:none;
+  }
 
-.flap{
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:#e7c39c;
-  clip-path: polygon(0 0, 50% 55%, 100% 0);
-  transform-origin: top;
-  transition: transform 1s ease;
-}
+  /* CARTA */
+  .letter{
+    position:absolute;
+    left:50%;
+    top:0;
+    transform: translate(-50%, 160%);
+    width: 340px;
+    padding: 26px 24px;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius:10px;
+    box-shadow:0 28px 90px rgba(0,0,0,.70);
+    line-height:1.85;
+    text-align:center;
+    transition: transform 1.55s ease;
+    background-image: url("https://www.transparenttextures.com/patterns/old-paper.png");
+    border: 1px solid rgba(0,0,0,.10);
+  }
+  .letter h2{
+    margin:0 0 10px;
+    font-size:20px;
+  }
+  .letter p{ margin: 10px 0; }
+  .signature{
+    margin-top:14px;
+    font-weight:900;
+  }
+  .sigline{
+    margin-top:4px;
+    font-style:italic;
+    opacity:.92;
+  }
 
-.seal{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-size:26px;
-}
+  /* ESTADOS */
+  .open .flap{ transform: rotateX(180deg); }
+  .open .letter{ transform: translate(-50%, -152%); }
 
-/* CARTA INTERNA */
-.letter{
-  position:absolute;
-  width:300px;
-  background:white;
-  color:#333;
-  padding:25px;
-  border-radius:6px;
-  text-align:center;
-  line-height:1.7;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
-  transform: translateY(120%);
-  transition: transform 1.2s ease;
-}
+  /* PANEL INFO */
+  .panel{
+    margin-top:20px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .pill{
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.14);
+    padding: 10px 12px;
+    border-radius: 999px;
+    font-size:13px;
+    color: rgba(255,255,255,.92);
+    user-select:none;
+  }
 
-.open .flap{
-  transform: rotateX(180deg);
-}
+  /* BOTONES */
+  .btn{
+    border:0;
+    padding:11px 14px;
+    border-radius:999px;
+    font-weight:900;
+    cursor:pointer;
+    background: linear-gradient(135deg,#ff2e63,#ff7aa2);
+    color:#fff;
+    box-shadow: 0 16px 40px rgba(255,46,99,.22);
+  }
+  .btn:active{ transform: scale(.99); }
 
-.open .letter{
-  transform: translateY(-140%);
-}
+  /* OVERLAY TOQUE */
+  .overlay{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    display:none;
+    place-items:center;
+    background: rgba(0,0,0,.70);
+    backdrop-filter: blur(10px);
+    padding:18px;
+  }
+  .overlay .box{
+    width:min(560px, 92vw);
+    background: rgba(18,0,19,.92);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 22px;
+    box-shadow: 0 22px 70px rgba(0,0,0,.55);
+    padding: 18px;
+    text-align:center;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .overlay .title{
+    font-size:18px;
+    font-weight:900;
+    margin-bottom:8px;
+  }
+  .overlay .text{
+    color: rgba(255,255,255,.80);
+    line-height:1.6;
+    margin-bottom:14px;
+    font-size:14px;
+  }
+  .overlay .btn{ width:100%; }
 
-.countdown{
-  position:absolute;
-  bottom:40px;
-  font-size:18px;
-  text-align:center;
-}
+  /* PÉTALOS */
+  .petal{
+    position:absolute;
+    top:-30px;
+    font-size:18px;
+    animation: fall linear forwards;
+    pointer-events:none;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,.35));
+  }
+  @keyframes fall{
+    to{
+      transform: translateY(112vh) rotate(360deg);
+      opacity:0;
+    }
+  }
+
+  /* YT oculto */
+  #ytwrap{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
 </style>
 </head>
 
 <body>
+  <div id="ytwrap"><div id="ytplayer"></div></div>
 
-<div id="envelopeContainer">
-  <div class="envelope-wrapper" id="envelope">
-    <div class="envelope"></div>
-    <div class="flap"></div>
-    <div class="seal">💌</div>
+  <div class="wrapper" id="wrapper">
+    <div class="envelope-area" id="envelopeArea">
+      <div class="envelope"></div>
+      <div class="flap"></div>
+      <div class="stamp-text" id="stampText">¿Estás lista? ¿Me amas? 💖</div>
+      <div class="seal">💌</div>
+
+      <!-- Carta (contenido final) -->
+      <div class="letter" id="letter">
+        <h2>Para Mónica Patricia 💖</h2>
+
+        <p>Hoy quiero decirte, con el corazón en la mano, cuánto te amo.</p>
+
+        <p>
+          Eres mi mundo entero: mi paz, mi alegría, mi hogar y mi motivo.
+          Contigo todo tiene sentido.
+        </p>
+
+        <p>
+          Sin ti no soy nadie… porque eres la parte más bonita de mi vida.
+          Eres mi bendición, mi sueño cumplido, mi milagro diario.
+        </p>
+
+        <p>
+          Gracias por existir. Gracias por elegirme.
+          Te amo más de lo que las palabras pueden explicar.
+        </p>
+
+        <div class="signature" id="signature"></div>
+        <div class="sigline">— Michael Gonzales, tu esposo. 💍❤️</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="pill" id="statusPill">Cargando hora segura…</div>
+      <div class="pill" id="countPill">⏳ …</div>
+      <button class="btn" id="musicBtn" style="display:none;">🎵 Reproducir</button>
+    </div>
   </div>
 
-  <div class="letter" id="letter">
-    <h2>Para Mónica Patricia 💖</h2>
-    <p>
-      Este es nuestro primer San Valentín…
-      y quiero que seas la primera y la última.
-    </p>
-    <p>
-      Cada año te voy a elegir a ti.
-      Hoy, mañana y siempre.
-    </p>
-    <p><b>¿Aceptás ser mi San Valentín? 💍</b></p>
+  <!-- Overlay (para habilitar audio) -->
+  <div class="overlay" id="overlay">
+    <div class="box">
+      <div class="title" id="overlayTitle">💖</div>
+      <div class="text" id="overlayText">Toca para continuar.</div>
+      <button class="btn" id="overlayBtn">Entrar ✨</button>
+    </div>
   </div>
-</div>
-
-<div class="countdown" id="countdownText">
-  Se abrirá el 14 de febrero a las 00:00 💫
-</div>
 
 <script>
-const target = new Date(new Date().getFullYear(), 1, 14, 0, 0, 0);
-if(new Date() > target){
-  target.setFullYear(target.getFullYear() + 1);
-}
+(() => {
+  // ==============================
+  // CONFIG
+  // ==============================
+  const NAME = "Mónica Patricia";
 
-const envelope = document.getElementById("envelopeContainer");
-const countdownText = document.getElementById("countdownText");
+  // Poné aquí el ID del YouTube exacto (después de v=)
+  // Ejemplo: https://www.youtube.com/watch?v=XXXX -> YT_VIDEO_ID="XXXX"
+  const YT_VIDEO_ID = "Vk-A6jLTOmM";
 
-function updateCountdown(){
-  const now = new Date();
-  const diff = target - now;
+  // Fechas objetivo (hora Guatemala)
+  // Intermedio: 13 feb 20:00
+  // Final:      14 feb 00:00
+  const TZ_API = "https://worldtimeapi.org/api/timezone/America/Guatemala";
 
-  if(diff <= 0){
-    envelope.classList.add("open");
-    countdownText.style.display = "none";
-    clearInterval(timer);
-    return;
+  const wrapper = document.getElementById("wrapper");
+  const envelopeArea = document.getElementById("envelopeArea");
+  const stampText = document.getElementById("stampText");
+  const statusPill = document.getElementById("statusPill");
+  const countPill = document.getElementById("countPill");
+  const overlay = document.getElementById("overlay");
+  const overlayTitle = document.getElementById("overlayTitle");
+  const overlayText = document.getElementById("overlayText");
+  const overlayBtn = document.getElementById("overlayBtn");
+  const musicBtn = document.getElementById("musicBtn");
+  const signature = document.getElementById("signature");
+
+  signature.textContent = `Te amo, ${NAME}.`;
+
+  // ==============================
+  // TIEMPO REAL (protección)
+  // ==============================
+  async function getRealNow(){
+    try{
+      const res = await fetch(TZ_API, { cache: "no-store" });
+      const data = await res.json();
+      return new Date(data.datetime);
+    }catch(e){
+      // fallback: si no hay internet o falla API, usamos reloj local (menos seguro)
+      return new Date();
+    }
   }
 
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  function makeTargets(now){
+    const y = now.getFullYear();
+    const teaser = new Date(y, 1, 13, 20, 0, 0); // Feb=1
+    const final  = new Date(y, 1, 14, 0, 0, 0);
+    // Si ya pasó final, apuntamos al siguiente año
+    if(now > final){
+      teaser.setFullYear(y + 1);
+      final.setFullYear(y + 1);
+    }
+    return { teaser, final };
+  }
 
-  countdownText.innerHTML =
-    `Se abrirá en ${hours}h ${minutes}m ${seconds}s 💫`;
-}
+  function fmtCountdown(ms){
+    const s = Math.max(0, Math.floor(ms/1000));
+    const hh = Math.floor(s/3600);
+    const mm = Math.floor((s%3600)/60);
+    const ss = s%60;
+    return `${hh}h ${mm}m ${ss}s`;
+  }
 
-const timer = setInterval(updateCountdown, 1000);
-updateCountdown();
+  // ==============================
+  // FONDO
+  // ==============================
+  function setBackground(mode){
+    // mode: "locked" | "teaser" | "final"
+    if(mode === "locked") document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgA");
+    if(mode === "teaser") document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgB");
+    if(mode === "final")  document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgC");
+  }
+
+  // ==============================
+  // PÉTALOS
+  // ==============================
+  let petalsTimer = null;
+  function startPetals(){
+    if(petalsTimer) return;
+    petalsTimer = setInterval(() => {
+      const p = document.createElement("div");
+      p.className = "petal";
+      p.textContent = Math.random() > 0.35 ? "🌹" : "💖";
+      p.style.left = (Math.random()*100) + "vw";
+      p.style.fontSize = (14 + Math.random()*14) + "px";
+      p.style.animationDuration = (5 + Math.random()*6) + "s";
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 12000);
+    }, 220);
+  }
+
+  // ==============================
+  // YOUTUBE (audio)
+  // ==============================
+  let player = null;
+  let isPlaying = false;
+  let userGestureUnlocked = false;
+
+  function loadYouTubeApi(){
+    return new Promise((resolve) => {
+      if(window.YT && window.YT.Player) return resolve();
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      window.onYouTubeIframeAPIReady = () => resolve();
+      document.head.appendChild(tag);
+    });
+  }
+
+  async function initPlayer(){
+    if(player) return;
+    await loadYouTubeApi();
+    player = new YT.Player("ytplayer", {
+      height:"1", width:"1",
+      videoId: YT_VIDEO_ID,
+      playerVars: {
+        autoplay: 0, controls: 0, rel: 0, modestbranding: 1
+      },
+      events: {
+        onReady: () => {
+          try{ player.setVolume(0); }catch{}
+        },
+        onStateChange: (e) => {
+          if(e.data === 1){ isPlaying = true; musicBtn.textContent = "⏸ Pausar"; }
+          if(e.data === 2){ isPlaying = false; musicBtn.textContent = "🎵 Reproducir"; }
+        }
+      }
+    });
+  }
+
+  async function playMusic(volume=70){
+    await initPlayer();
+    try{
+      player.setVolume(volume);
+      player.playVideo();
+      isPlaying = true;
+    }catch{}
+  }
+
+  async function pauseMusic(){
+    if(!player) return;
+    try{ player.pauseVideo(); }catch{}
+  }
+
+  musicBtn.addEventListener("click", async () => {
+    userGestureUnlocked = true;
+    await initPlayer();
+    if(!isPlaying) await playMusic(70);
+    else await pauseMusic();
+  });
+
+  // ==============================
+  // OVERLAY
+  // ==============================
+  function showOverlay(title, text, btnText="Entrar ✨"){
+    overlayTitle.textContent = title;
+    overlayText.textContent = text;
+    overlayBtn.textContent = btnText;
+    overlay.style.display = "grid";
+  }
+  function hideOverlay(){
+    overlay.style.display = "none";
+  }
+
+  overlayBtn.addEventListener("click", async () => {
+    userGestureUnlocked = true;
+    hideOverlay();
+    // si estamos en teaser, iniciamos el player en mute para que en medianoche podamos subir volumen
+    await initPlayer();
+    try{
+      player.setVolume(0);
+      player.playVideo();
+    }catch{}
+    musicBtn.style.display = "inline-block";
+  });
+
+  // ==============================
+  // FASES
+  // ==============================
+  let phase = "locked"; // locked | teaser | final
+
+  function setPhase(newPhase){
+    if(phase === newPhase) return;
+    phase = newPhase;
+
+    if(phase === "locked"){
+      setBackground("locked");
+      stampText.style.display = "none";
+      wrapper.classList.remove("open");
+      statusPill.textContent = "💌 Carta sellada";
+      musicBtn.style.display = "none";
+    }
+
+    if(phase === "teaser"){
+      setBackground("teaser");
+      stampText.style.display = "inline-flex";
+      wrapper.classList.remove("open");
+      statusPill.textContent = "🌙 Esta noche…";
+      // Pedimos toque (habilita audio y la “interacción”)
+      showOverlay("💖", "¿Estás lista? Toca para entrar…", "Entrar ✨");
+      musicBtn.style.display = "inline-block";
+    }
+
+    if(phase === "final"){
+      setBackground("final");
+      stampText.style.display = "none";
+      statusPill.textContent = "🌹 14 de febrero";
+      // Abrimos carta
+      wrapper.classList.add("open");
+      startPetals();
+      // Música: si ya hubo toque antes (teaser), subimos volumen sin molestar
+      // si no hubo, mostramos overlay para que toque y arranque.
+      if(userGestureUnlocked){
+        playMusic(70);
+        musicBtn.style.display = "inline-block";
+      }else{
+        showOverlay("🌹", "Toca para abrir y escuchar la canción.", "Abrir 💌");
+        // Al tocar overlay, ya iniciaremos player (en el handler)
+      }
+      countPill.textContent = "✨";
+    }
+  }
+
+  // Acción intermedia: permitir abrir una mini-nota (opcional)
+  envelopeArea.addEventListener("click", async () => {
+    if(phase === "teaser"){
+      // mini-animación de “casi abrir” + texto
+      wrapper.classList.toggle("open");
+      // Mantener cerrada la carta real (si se abrió, la cerramos a los 2s)
+      setTimeout(() => wrapper.classList.remove("open"), 1800);
+      // si no han tocado overlay, lo pedimos
+      if(!userGestureUnlocked) showOverlay("💖", "Toca el botón para continuar.", "Entrar ✨");
+    }
+  });
+
+  // ==============================
+  // LOOP PRINCIPAL (hora segura)
+  // ==============================
+  let targets = null;
+
+  async function loop(){
+    const now = await getRealNow();
+    if(!targets) targets = makeTargets(now);
+
+    const { teaser, final } = targets;
+
+    if(now < teaser){
+      setPhase("locked");
+      countPill.textContent = "Se abre mañana 8:00 PM";
+      // Contador hacia teaser
+      const diff = teaser - now;
+      countPill.textContent = `⏳ ${fmtCountdown(diff)} (para la noche)`;
+      return setTimeout(loop, 1000);
+    }
+
+    if(now >= teaser && now < final){
+      setPhase("teaser");
+      const diff = final - now;
+      countPill.textContent = `⏳ ${fmtCountdown(diff)} (para medianoche)`;
+      return setTimeout(loop, 1000);
+    }
+
+    if(now >= final){
+      setPhase("final");
+      return; // ya no necesitamos seguir
+    }
+  }
+
+  // ==============================
+  // DISUASIÓN DEVTOOLS (no es 100% bloqueable)
+  // ==============================
+  // Nota: esto solo dificulta, no hace imposible ver el código.
+  document.addEventListener("contextmenu", (e) => e.preventDefault());
+  document.addEventListener("keydown", (e) => {
+    const k = (e.key || "").toLowerCase();
+    if (e.key === "F12") e.preventDefault();
+    if (e.ctrlKey && (k === "u" || k === "s" || k === "p")) e.preventDefault();
+    if (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c")) e.preventDefault();
+  });
+
+  // detección simple: si devtools se abre, oscurece (solo disuasión)
+  const devCheck = () => {
+    const t = 160;
+    const open = (window.outerWidth - window.innerWidth > t) || (window.outerHeight - window.innerHeight > t);
+    if(open){
+      document.body.style.filter = "blur(8px)";
+    }else{
+      document.body.style.filter = "none";
+    }
+  };
+  setInterval(devCheck, 900);
+
+  // START
+  setBackground("locked");
+  loop();
+})();
 </script>
-
 </body>
 </html>
