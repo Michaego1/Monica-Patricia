@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Para Mónica Patricia 💌</title>
 <meta name="theme-color" content="#120013" />
 
@@ -17,7 +17,8 @@
   body{
     margin:0; height:100vh; overflow:hidden;
     display:flex; align-items:center; justify-content:center;
-    background: var(--bgA); color:#fff; font-family: "Georgia", serif;
+    background: var(--bgA);
+    color:#fff; font-family:"Georgia", serif;
     transition: background 1.2s ease;
   }
   .wrapper{ text-align:center; position:relative; width:min(920px, 92vw); padding:14px; }
@@ -70,7 +71,7 @@
     border: 1px solid rgba(0,0,0,.10);
   }
   .letter h2{ margin:0 0 10px; font-size:20px; }
-  .letter p{ margin: 10px 0; }
+  .letter p{ margin:10px 0; }
   .signature{ margin-top:14px; font-weight:900; }
   .sigline{ margin-top:4px; font-style:italic; opacity:.92; }
 
@@ -119,18 +120,14 @@
     animation: fall linear forwards; pointer-events:none;
     filter: drop-shadow(0 8px 16px rgba(0,0,0,.35));
   }
-  @keyframes fall{
-    to{ transform: translateY(112vh) rotate(360deg); opacity:0; }
-  }
+  @keyframes fall{ to{ transform: translateY(112vh) rotate(360deg); opacity:0; } }
 
   .sparkle{
     position:absolute; top:-20px; font-size:16px;
     animation: sparkleFall linear forwards; pointer-events:none;
     filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
   }
-  @keyframes sparkleFall{
-    to{ transform: translateY(112vh) rotate(720deg); opacity:0; }
-  }
+  @keyframes sparkleFall{ to{ transform: translateY(112vh) rotate(720deg); opacity:0; } }
 
   #ytwrap{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
 </style>
@@ -150,17 +147,14 @@
         <h2>Para Mónica Patricia 💖</h2>
 
         <p>Hoy quiero decirte, con el corazón en la mano, cuánto te amo.</p>
-
         <p>
           Eres mi mundo entero: mi paz, mi alegría, mi hogar y mi motivo.
           Contigo todo tiene sentido.
         </p>
-
         <p>
           Sin ti no soy nadie… porque eres la parte más bonita de mi vida.
           Eres mi bendición, mi sueño cumplido, mi milagro diario.
         </p>
-
         <p>
           Gracias por existir. Gracias por elegirme.
           Te amo más de lo que las palabras pueden explicar.
@@ -172,7 +166,7 @@
     </div>
 
     <div class="panel">
-      <div class="pill" id="statusPill">Cargando hora segura…</div>
+      <div class="pill" id="statusPill">💌 Carta sellada</div>
       <div class="pill" id="countPill">⏳ …</div>
       <button class="btn" id="musicBtn" style="display:none;">🎵 Reproducir</button>
     </div>
@@ -191,23 +185,6 @@
   const NAME = "Mónica Patricia";
   const YT_VIDEO_ID = "Vk-A6jLTOmM";
 
-  // APIs (con respaldo). Si una falla o se cuelga, probamos otra.
-  const TIME_APIS = [
-    // 1) worldtimeapi
-    async (signal) => {
-      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Guatemala", { cache:"no-store", signal });
-      const data = await res.json();
-      return new Date(data.datetime);
-    },
-    // 2) timeapi.io (backup)
-    async (signal) => {
-      const res = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=America/Guatemala", { cache:"no-store", signal });
-      const data = await res.json();
-      // data.dateTime viene en ISO
-      return new Date(data.dateTime);
-    }
-  ];
-
   const wrapper = document.getElementById("wrapper");
   const envelopeArea = document.getElementById("envelopeArea");
   const stampText = document.getElementById("stampText");
@@ -222,68 +199,58 @@
 
   signature.textContent = `Te amo, ${NAME}.`;
 
-  // ===== Hora segura con timeout (NO se congela) =====
-  let lastRealNow = null;
-  let timeMode = "local"; // "secure" | "local"
+  // ===== Tiempo (no bloquea) =====
+  let secureBase = null;
+  let secureBaseLocalTs = 0;
 
-  async function fetchWithTimeout(fetcher, ms){
+  async function tryFetchSecureTimeOnce(timeoutMs=1800){
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), ms);
-    try{
-      const dt = await fetcher(ctrl.signal);
-      clearTimeout(t);
-      return dt;
-    }catch(e){
-      clearTimeout(t);
-      throw e;
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+
+    const urls = [
+      "https://timeapi.io/api/Time/current/zone?timeZone=America/Guatemala",
+      "https://worldtimeapi.org/api/timezone/America/Guatemala"
+    ];
+
+    for(const url of urls){
+      try{
+        const res = await fetch(url, { cache:"no-store", signal: ctrl.signal });
+        const data = await res.json();
+        clearTimeout(t);
+
+        const dt = data.dateTime ? new Date(data.dateTime) : new Date(data.datetime);
+        if(!isNaN(dt.getTime())){
+          secureBase = dt;
+          secureBaseLocalTs = Date.now();
+          return true;
+        }
+      }catch(e){}
     }
+
+    clearTimeout(t);
+    return false;
   }
 
-  async function getRealNow(){
-    // Si tenemos una hora segura previa, avanzamos “suave” sin spamear API cada 1s
-    // (pero igual re-validamos cada cierto tiempo)
-    if(lastRealNow && timeMode === "secure"){
-      // avanzamos con el reloj local desde el último fetch
-      const drift = Date.now() - lastRealNow._localTs;
-      return new Date(lastRealNow.getTime() + drift);
+  function nowGT(){
+    if(secureBase){
+      const drift = Date.now() - secureBaseLocalTs;
+      return new Date(secureBase.getTime() + drift);
     }
-
-    // Intentamos APIs con timeout corto
-    for(const apiFn of TIME_APIS){
-      try{
-        const dt = await fetchWithTimeout(apiFn, 2500);
-        timeMode = "secure";
-        lastRealNow = dt;
-        lastRealNow._localTs = Date.now();
-        return dt;
-      }catch(_) {}
-    }
-
-    // Fallback local (pero ya no se congela la app)
-    timeMode = "local";
     return new Date();
   }
 
-  // Revalidar hora segura cada 30s (si hay internet)
-  setInterval(async () => {
-    for(const apiFn of TIME_APIS){
-      try{
-        const dt = await fetchWithTimeout(apiFn, 2500);
-        timeMode = "secure";
-        lastRealNow = dt;
-        lastRealNow._localTs = Date.now();
-        return;
-      }catch(_) {}
-    }
-  }, 30000);
+  tryFetchSecureTimeOnce();
+  setInterval(() => { tryFetchSecureTimeOnce(); }, 60000);
 
-  function makeTargets(now){
-    const y = now.getFullYear();
-    const teaser  = new Date(y, 1, 13, 20, 0, 0);   // 13 Feb 8:00 PM
+  // ===== Targets (AJUSTADO A 13 FEB 3:00 PM) =====
+  function makeTargets(n){
+    const y = n.getFullYear();
+
+    const teaser  = new Date(y, 1, 13, 15, 0, 0);   // ✅ 13 Feb 3:00 PM
     const final   = new Date(y, 1, 14, 0, 0, 0);    // 14 Feb 00:00
     const preOpen = new Date(y, 1, 14, 14, 20, 0);  // 14 Feb 2:20 PM
 
-    if(now > preOpen){
+    if(n > preOpen){
       teaser.setFullYear(y + 1);
       final.setFullYear(y + 1);
       preOpen.setFullYear(y + 1);
@@ -305,6 +272,7 @@
     if(mode === "final")  document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgC");
   }
 
+  // ===== Animaciones =====
   let petalsTimer = null;
   function startPetals(){
     if(petalsTimer) return;
@@ -369,11 +337,7 @@
 
   async function playMusic(volume=70){
     await initPlayer();
-    try{
-      player.setVolume(volume);
-      player.playVideo();
-      isPlaying = true;
-    }catch{}
+    try{ player.setVolume(volume); player.playVideo(); isPlaying = true; }catch{}
   }
   async function pauseMusic(){
     if(!player) return;
@@ -400,10 +364,7 @@
     userGestureUnlocked = true;
     hideOverlay();
     await initPlayer();
-    try{
-      player.setVolume(0);
-      player.playVideo();
-    }catch{}
+    try{ player.setVolume(0); player.playVideo(); }catch{}
     musicBtn.style.display = "inline-block";
   });
 
@@ -427,8 +388,8 @@
       stampText.style.display = "inline-flex";
       stampText.textContent = "¿Estás lista? ¿Me amas? 💖";
       wrapper.classList.remove("open");
-      statusPill.textContent = "🌙 Esta noche…";
-      showOverlay("💖", "¿Estás lista? Toca para entrar…", "Entrar ✨");
+      statusPill.textContent = "🌙 ¿Estás lista?";
+      showOverlay("💖", "Toca para entrar…", "Entrar ✨");
       musicBtn.style.display = "inline-block";
     }
 
@@ -465,7 +426,7 @@
     }
   }
 
-  envelopeArea.addEventListener("click", async () => {
+  envelopeArea.addEventListener("click", () => {
     if(phase === "teaser"){
       wrapper.classList.toggle("open");
       setTimeout(() => wrapper.classList.remove("open"), 1800);
@@ -473,61 +434,37 @@
     }
   });
 
-  // ===== Loop principal =====
+  // ===== Loop =====
   let targets = null;
 
-  async function loop(){
-    const now = await getRealNow();
-    if(!targets) targets = makeTargets(now);
-
-    // Indicador de modo de hora (para que sepas si está usando hora segura o local)
-    statusPill.textContent = (timeMode === "secure")
-      ? statusPill.textContent.replace(" (hora local)", "")
-      : (statusPill.textContent.includes("(hora local)") ? statusPill.textContent : (statusPill.textContent + " (hora local)"));
-
+  function loop(){
+    const n = nowGT();
+    if(!targets) targets = makeTargets(n);
     const { teaser, final, preOpen } = targets;
 
-    if(now < teaser){
+    if(n < teaser){
       setPhase("locked");
-      const diff = teaser - now;
-      countPill.textContent = `⏳ ${fmtCountdown(diff)} (para la noche)`;
+      countPill.textContent = `⏳ ${fmtCountdown(teaser - n)} (para las 3:00 PM)`;
       return setTimeout(loop, 1000);
     }
 
-    if(now >= teaser && now < final){
+    if(n >= teaser && n < final){
       setPhase("teaser");
-      const diff = final - now;
-      countPill.textContent = `⏳ ${fmtCountdown(diff)} (para medianoche)`;
+      countPill.textContent = `⏳ ${fmtCountdown(final - n)} (para medianoche)`;
       return setTimeout(loop, 1000);
     }
 
-    if(now >= final && now < preOpen){
+    if(n >= final && n < preOpen){
       setPhase("final");
       return setTimeout(loop, 3000);
     }
 
-    if(now >= preOpen){
+    if(n >= preOpen){
       setPhase("preopen");
       return;
     }
   }
 
-  // ===== Disuasión DevTools (solo disuasión, no es 100% bloqueable) =====
-  document.addEventListener("contextmenu", (e) => e.preventDefault());
-  document.addEventListener("keydown", (e) => {
-    const k = (e.key || "").toLowerCase();
-    if (e.key === "F12") e.preventDefault();
-    if (e.ctrlKey && (k === "u" || k === "s" || k === "p")) e.preventDefault();
-    if (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c")) e.preventDefault();
-  });
-
-  setInterval(() => {
-    const t = 160;
-    const open = (window.outerWidth - window.innerWidth > t) || (window.outerHeight - window.innerHeight > t);
-    document.body.style.filter = open ? "blur(8px)" : "none";
-  }, 900);
-
-  // START
   setBackground("locked");
   loop();
 })();
