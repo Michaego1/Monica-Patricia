@@ -15,45 +15,22 @@
     --ink: #3b2b20;
   }
   body{
-    margin:0;
-    height:100vh;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background: var(--bgA);
-    color:#fff;
-    font-family: "Georgia", serif;
+    margin:0; height:100vh; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--bgA); color:#fff; font-family: "Georgia", serif;
     transition: background 1.2s ease;
   }
-  .wrapper{
-    text-align:center;
-    position:relative;
-    width:min(920px, 92vw);
-    padding:14px;
-  }
+  .wrapper{ text-align:center; position:relative; width:min(920px, 92vw); padding:14px; }
 
-  /* SOBRE */
-  .envelope-area{
-    position:relative;
-    width:360px;
-    height:250px;
-    margin: 0 auto;
-    transform: translateZ(0);
-  }
+  .envelope-area{ position:relative; width:360px; height:250px; margin:0 auto; transform: translateZ(0); }
   .envelope{
-    width:100%;
-    height:100%;
-    background:#e7c39c;
-    border-radius:10px;
+    width:100%; height:100%;
+    background:#e7c39c; border-radius:10px;
     box-shadow:0 22px 70px rgba(0,0,0,.55);
-    position:absolute;
-    left:0; top:0;
+    position:absolute; left:0; top:0;
   }
   .flap{
-    position:absolute;
-    left:0; top:0;
-    width:100%; height:100%;
+    position:absolute; left:0; top:0; width:100%; height:100%;
     background:#d9b184;
     clip-path: polygon(0 0, 50% 62%, 100% 0);
     transform-origin: top;
@@ -61,50 +38,33 @@
     border-radius:10px;
   }
   .seal{
-    position:absolute;
-    left:50%; top:56%;
+    position:absolute; left:50%; top:56%;
     transform:translate(-50%,-50%);
-    width:58px; height:58px;
-    border-radius:999px;
+    width:58px; height:58px; border-radius:999px;
     background: radial-gradient(circle at 30% 30%, #ff7aa2, #b1002f 70%);
     box-shadow: 0 14px 30px rgba(0,0,0,.35);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:26px;
-    user-select:none;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; user-select:none;
   }
 
-  /* TEXTO SOBRE */
   .stamp-text{
-    position:absolute;
-    left:50%; top:16%;
-    transform:translateX(-50%);
+    position:absolute; left:50%; top:16%; transform:translateX(-50%);
     background: rgba(0,0,0,.18);
     border:1px solid rgba(255,255,255,.18);
-    padding:8px 12px;
-    border-radius:999px;
+    padding:8px 12px; border-radius:999px;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    font-weight:800;
-    font-size:13px;
-    letter-spacing:.2px;
+    font-weight:800; font-size:13px; letter-spacing:.2px;
     display:none;
   }
 
-  /* CARTA */
   .letter{
-    position:absolute;
-    left:50%;
-    top:0;
+    position:absolute; left:50%; top:0;
     transform: translate(-50%, 160%);
-    width: 340px;
-    padding: 26px 24px;
-    background: var(--paper);
-    color: var(--ink);
+    width: 340px; padding: 26px 24px;
+    background: var(--paper); color: var(--ink);
     border-radius:10px;
     box-shadow:0 28px 90px rgba(0,0,0,.70);
-    line-height:1.85;
-    text-align:center;
+    line-height:1.85; text-align:center;
     transition: transform 1.55s ease;
     background-image: url("https://www.transparenttextures.com/patterns/old-paper.png");
     border: 1px solid rgba(0,0,0,.10);
@@ -114,52 +74,32 @@
   .signature{ margin-top:14px; font-weight:900; }
   .sigline{ margin-top:4px; font-style:italic; opacity:.92; }
 
-  /* ESTADOS */
   .open .flap{ transform: rotateX(180deg); }
   .open .letter{ transform: translate(-50%, -152%); }
 
-  /* PANEL INFO */
   .panel{
     margin-top:20px;
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    justify-content:center;
+    display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   }
   .pill{
     background: rgba(255,255,255,.10);
     border: 1px solid rgba(255,255,255,.14);
-    padding: 10px 12px;
-    border-radius: 999px;
-    font-size:13px;
-    color: rgba(255,255,255,.92);
+    padding: 10px 12px; border-radius: 999px;
+    font-size:13px; color: rgba(255,255,255,.92);
     user-select:none;
   }
 
-  /* BOTONES */
   .btn{
-    border:0;
-    padding:11px 14px;
-    border-radius:999px;
-    font-weight:900;
-    cursor:pointer;
+    border:0; padding:11px 14px; border-radius:999px;
+    font-weight:900; cursor:pointer;
     background: linear-gradient(135deg,#ff2e63,#ff7aa2);
-    color:#fff;
-    box-shadow: 0 16px 40px rgba(255,46,99,.22);
+    color:#fff; box-shadow: 0 16px 40px rgba(255,46,99,.22);
   }
-  .btn:active{ transform: scale(.99); }
 
-  /* OVERLAY TOQUE */
   .overlay{
-    position:fixed;
-    inset:0;
-    z-index:50;
-    display:none;
-    place-items:center;
-    background: rgba(0,0,0,.70);
-    backdrop-filter: blur(10px);
-    padding:18px;
+    position:fixed; inset:0; z-index:50; display:none; place-items:center;
+    background: rgba(0,0,0,.70); backdrop-filter: blur(10px); padding:18px;
   }
   .overlay .box{
     width:min(560px, 92vw);
@@ -167,56 +107,31 @@
     border: 1px solid rgba(255,255,255,.14);
     border-radius: 22px;
     box-shadow: 0 22px 70px rgba(0,0,0,.55);
-    padding: 18px;
-    text-align:center;
+    padding: 18px; text-align:center;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   }
-  .overlay .title{
-    font-size:18px;
-    font-weight:900;
-    margin-bottom:8px;
-  }
-  .overlay .text{
-    color: rgba(255,255,255,.80);
-    line-height:1.6;
-    margin-bottom:14px;
-    font-size:14px;
-  }
+  .overlay .title{ font-size:18px; font-weight:900; margin-bottom:8px; }
+  .overlay .text{ color: rgba(255,255,255,.80); line-height:1.6; margin-bottom:14px; font-size:14px; }
   .overlay .btn{ width:100%; }
 
-  /* PÉTALOS */
   .petal{
-    position:absolute;
-    top:-30px;
-    font-size:18px;
-    animation: fall linear forwards;
-    pointer-events:none;
+    position:absolute; top:-30px; font-size:18px;
+    animation: fall linear forwards; pointer-events:none;
     filter: drop-shadow(0 8px 16px rgba(0,0,0,.35));
   }
   @keyframes fall{
-    to{
-      transform: translateY(112vh) rotate(360deg);
-      opacity:0;
-    }
+    to{ transform: translateY(112vh) rotate(360deg); opacity:0; }
   }
 
-  /* BRILLOS / CORAZONES (fase 2:20) */
   .sparkle{
-    position:absolute;
-    top:-20px;
-    font-size:16px;
-    animation: sparkleFall linear forwards;
-    pointer-events:none;
+    position:absolute; top:-20px; font-size:16px;
+    animation: sparkleFall linear forwards; pointer-events:none;
     filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
   }
   @keyframes sparkleFall{
-    to{
-      transform: translateY(112vh) rotate(720deg);
-      opacity:0;
-    }
+    to{ transform: translateY(112vh) rotate(720deg); opacity:0; }
   }
 
-  /* YT oculto */
   #ytwrap{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
 </style>
 </head>
@@ -231,7 +146,6 @@
       <div class="stamp-text" id="stampText">¿Estás lista? ¿Me amas? 💖</div>
       <div class="seal">💌</div>
 
-      <!-- Carta (contenido final) -->
       <div class="letter" id="letter">
         <h2>Para Mónica Patricia 💖</h2>
 
@@ -264,7 +178,6 @@
     </div>
   </div>
 
-  <!-- Overlay (para habilitar audio) -->
   <div class="overlay" id="overlay">
     <div class="box">
       <div class="title" id="overlayTitle">💖</div>
@@ -275,12 +188,25 @@
 
 <script>
 (() => {
-  // ==============================
-  // CONFIG
-  // ==============================
   const NAME = "Mónica Patricia";
   const YT_VIDEO_ID = "Vk-A6jLTOmM";
-  const TZ_API = "https://worldtimeapi.org/api/timezone/America/Guatemala";
+
+  // APIs (con respaldo). Si una falla o se cuelga, probamos otra.
+  const TIME_APIS = [
+    // 1) worldtimeapi
+    async (signal) => {
+      const res = await fetch("https://worldtimeapi.org/api/timezone/America/Guatemala", { cache:"no-store", signal });
+      const data = await res.json();
+      return new Date(data.datetime);
+    },
+    // 2) timeapi.io (backup)
+    async (signal) => {
+      const res = await fetch("https://timeapi.io/api/Time/current/zone?timeZone=America/Guatemala", { cache:"no-store", signal });
+      const data = await res.json();
+      // data.dateTime viene en ISO
+      return new Date(data.dateTime);
+    }
+  ];
 
   const wrapper = document.getElementById("wrapper");
   const envelopeArea = document.getElementById("envelopeArea");
@@ -296,33 +222,72 @@
 
   signature.textContent = `Te amo, ${NAME}.`;
 
-  // ==============================
-  // TIEMPO REAL (protección)
-  // ==============================
-  async function getRealNow(){
+  // ===== Hora segura con timeout (NO se congela) =====
+  let lastRealNow = null;
+  let timeMode = "local"; // "secure" | "local"
+
+  async function fetchWithTimeout(fetcher, ms){
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), ms);
     try{
-      const res = await fetch(TZ_API, { cache: "no-store" });
-      const data = await res.json();
-      return new Date(data.datetime);
+      const dt = await fetcher(ctrl.signal);
+      clearTimeout(t);
+      return dt;
     }catch(e){
-      return new Date(); // fallback (menos seguro si falla API)
+      clearTimeout(t);
+      throw e;
     }
   }
 
+  async function getRealNow(){
+    // Si tenemos una hora segura previa, avanzamos “suave” sin spamear API cada 1s
+    // (pero igual re-validamos cada cierto tiempo)
+    if(lastRealNow && timeMode === "secure"){
+      // avanzamos con el reloj local desde el último fetch
+      const drift = Date.now() - lastRealNow._localTs;
+      return new Date(lastRealNow.getTime() + drift);
+    }
+
+    // Intentamos APIs con timeout corto
+    for(const apiFn of TIME_APIS){
+      try{
+        const dt = await fetchWithTimeout(apiFn, 2500);
+        timeMode = "secure";
+        lastRealNow = dt;
+        lastRealNow._localTs = Date.now();
+        return dt;
+      }catch(_) {}
+    }
+
+    // Fallback local (pero ya no se congela la app)
+    timeMode = "local";
+    return new Date();
+  }
+
+  // Revalidar hora segura cada 30s (si hay internet)
+  setInterval(async () => {
+    for(const apiFn of TIME_APIS){
+      try{
+        const dt = await fetchWithTimeout(apiFn, 2500);
+        timeMode = "secure";
+        lastRealNow = dt;
+        lastRealNow._localTs = Date.now();
+        return;
+      }catch(_) {}
+    }
+  }, 30000);
+
   function makeTargets(now){
     const y = now.getFullYear();
+    const teaser  = new Date(y, 1, 13, 20, 0, 0);   // 13 Feb 8:00 PM
+    const final   = new Date(y, 1, 14, 0, 0, 0);    // 14 Feb 00:00
+    const preOpen = new Date(y, 1, 14, 14, 20, 0);  // 14 Feb 2:20 PM
 
-    const teaser  = new Date(y, 1, 13, 20, 0, 0); // 13 Feb 8:00 PM
-    const final   = new Date(y, 1, 14, 0, 0, 0);  // 14 Feb 00:00
-    const preOpen = new Date(y, 1, 14, 14, 20, 0); // 14 Feb 2:20 PM
-
-    // Si ya pasó preOpen, se prepara para el siguiente año
     if(now > preOpen){
       teaser.setFullYear(y + 1);
       final.setFullYear(y + 1);
       preOpen.setFullYear(y + 1);
     }
-
     return { teaser, final, preOpen };
   }
 
@@ -334,18 +299,12 @@
     return `${hh}h ${mm}m ${ss}s`;
   }
 
-  // ==============================
-  // FONDO
-  // ==============================
   function setBackground(mode){
     if(mode === "locked") document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgA");
     if(mode === "teaser") document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgB");
     if(mode === "final")  document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgC");
   }
 
-  // ==============================
-  // PÉTALOS
-  // ==============================
   let petalsTimer = null;
   function startPetals(){
     if(petalsTimer) return;
@@ -361,9 +320,6 @@
     }, 220);
   }
 
-  // ==============================
-  // BRILLOS (fase 2:20)
-  // ==============================
   let sparkleTimer = null;
   function startSparkles(){
     if(sparkleTimer) return;
@@ -379,9 +335,7 @@
     }, 180);
   }
 
-  // ==============================
-  // YOUTUBE (audio)
-  // ==============================
+  // ===== YouTube =====
   let player = null;
   let isPlaying = false;
   let userGestureUnlocked = false;
@@ -402,9 +356,7 @@
     player = new YT.Player("ytplayer", {
       height:"1", width:"1",
       videoId: YT_VIDEO_ID,
-      playerVars: {
-        autoplay: 0, controls: 0, rel: 0, modestbranding: 1
-      },
+      playerVars: { autoplay: 0, controls: 0, rel: 0, modestbranding: 1 },
       events: {
         onReady: () => { try{ player.setVolume(0); }catch{} },
         onStateChange: (e) => {
@@ -423,7 +375,6 @@
       isPlaying = true;
     }catch{}
   }
-
   async function pauseMusic(){
     if(!player) return;
     try{ player.pauseVideo(); }catch{}
@@ -436,9 +387,7 @@
     else await pauseMusic();
   });
 
-  // ==============================
-  // OVERLAY
-  // ==============================
+  // ===== Overlay =====
   function showOverlay(title, text, btnText="Entrar ✨"){
     overlayTitle.textContent = title;
     overlayText.textContent = text;
@@ -453,14 +402,12 @@
     await initPlayer();
     try{
       player.setVolume(0);
-      player.playVideo(); // se queda corriendo en mute
+      player.playVideo();
     }catch{}
     musicBtn.style.display = "inline-block";
   });
 
-  // ==============================
-  // FASES
-  // ==============================
+  // ===== Fases =====
   let phase = "locked"; // locked | teaser | final | preopen
 
   function setPhase(newPhase){
@@ -471,8 +418,8 @@
       setBackground("locked");
       stampText.style.display = "none";
       wrapper.classList.remove("open");
-      statusPill.textContent = "💌 Carta sellada";
       musicBtn.style.display = "none";
+      statusPill.textContent = "💌 Carta sellada";
     }
 
     if(phase === "teaser"){
@@ -508,20 +455,16 @@
       statusPill.textContent = "✨ Ya casi…";
       musicBtn.style.display = "inline-block";
 
-      // “pre-apertura” romántica (abre/cierra un poquito)
       wrapper.classList.add("open");
       setTimeout(()=> wrapper.classList.remove("open"), 1400);
       setTimeout(()=> wrapper.classList.add("open"), 2600);
       setTimeout(()=> wrapper.classList.remove("open"), 3800);
 
-      // Brillitos + corazones
       startSparkles();
-
       countPill.textContent = "💖";
     }
   }
 
-  // Acción intermedia: mini animación al tocar el sobre en teaser
   envelopeArea.addEventListener("click", async () => {
     if(phase === "teaser"){
       wrapper.classList.toggle("open");
@@ -530,18 +473,20 @@
     }
   });
 
-  // ==============================
-  // LOOP PRINCIPAL (hora segura)
-  // ==============================
+  // ===== Loop principal =====
   let targets = null;
 
   async function loop(){
     const now = await getRealNow();
     if(!targets) targets = makeTargets(now);
 
+    // Indicador de modo de hora (para que sepas si está usando hora segura o local)
+    statusPill.textContent = (timeMode === "secure")
+      ? statusPill.textContent.replace(" (hora local)", "")
+      : (statusPill.textContent.includes("(hora local)") ? statusPill.textContent : (statusPill.textContent + " (hora local)"));
+
     const { teaser, final, preOpen } = targets;
 
-    // 1) Antes del 13 Feb 20:00
     if(now < teaser){
       setPhase("locked");
       const diff = teaser - now;
@@ -549,7 +494,6 @@
       return setTimeout(loop, 1000);
     }
 
-    // 2) 13 Feb 20:00 -> 14 Feb 00:00
     if(now >= teaser && now < final){
       setPhase("teaser");
       const diff = final - now;
@@ -557,22 +501,18 @@
       return setTimeout(loop, 1000);
     }
 
-    // 3) 14 Feb 00:00 -> 14 Feb 14:20 (carta abierta)
     if(now >= final && now < preOpen){
       setPhase("final");
       return setTimeout(loop, 3000);
     }
 
-    // 4) 14 Feb 14:20 en adelante (fase “ya pronto”)
     if(now >= preOpen){
       setPhase("preopen");
       return;
     }
   }
 
-  // ==============================
-  // DISUASIÓN DEVTOOLS (no es 100% bloqueable)
-  // ==============================
+  // ===== Disuasión DevTools (solo disuasión, no es 100% bloqueable) =====
   document.addEventListener("contextmenu", (e) => e.preventDefault());
   document.addEventListener("keydown", (e) => {
     const k = (e.key || "").toLowerCase();
@@ -581,12 +521,11 @@
     if (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c")) e.preventDefault();
   });
 
-  const devCheck = () => {
+  setInterval(() => {
     const t = 160;
     const open = (window.outerWidth - window.innerWidth > t) || (window.outerHeight - window.innerHeight > t);
     document.body.style.filter = open ? "blur(8px)" : "none";
-  };
-  setInterval(devCheck, 900);
+  }, 900);
 
   // START
   setBackground("locked");
