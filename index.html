@@ -98,6 +98,22 @@
     color:#fff; box-shadow: 0 16px 40px rgba(255,46,99,.22);
   }
 
+  /* Mensajito tierno teaser */
+  .tiny{
+    margin-top:10px;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: rgba(255,255,255,.92);
+    font-size:14px;
+    opacity:0;
+    transform: translateY(8px);
+    transition: opacity .35s ease, transform .35s ease;
+    user-select:none;
+  }
+  .tiny.show{
+    opacity:1;
+    transform: translateY(0);
+  }
+
   .overlay{
     position:fixed; inset:0; z-index:50; display:none; place-items:center;
     background: rgba(0,0,0,.70); backdrop-filter: blur(10px); padding:18px;
@@ -128,6 +144,17 @@
     filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
   }
   @keyframes sparkleFall{ to{ transform: translateY(112vh) rotate(720deg); opacity:0; } }
+
+  /* Animación del sobre (teaser) */
+  .nudge{ animation: nudge 0.8s ease; }
+  @keyframes nudge{
+    0%{ transform: translateY(0) rotate(0); }
+    20%{ transform: translateY(-4px) rotate(-1deg); }
+    40%{ transform: translateY(2px) rotate(1deg); }
+    60%{ transform: translateY(-3px) rotate(-1deg); }
+    80%{ transform: translateY(2px) rotate(1deg); }
+    100%{ transform: translateY(0) rotate(0); }
+  }
 
   #ytwrap{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
 </style>
@@ -170,6 +197,8 @@
       <div class="pill" id="countPill">⏳ …</div>
       <button class="btn" id="musicBtn" style="display:none;">🎵 Reproducir</button>
     </div>
+
+    <div class="tiny" id="tinyMsg">Solo un poquito más… mi amor 💖</div>
   </div>
 
   <div class="overlay" id="overlay">
@@ -196,6 +225,7 @@
   const overlayBtn = document.getElementById("overlayBtn");
   const musicBtn = document.getElementById("musicBtn");
   const signature = document.getElementById("signature");
+  const tinyMsg = document.getElementById("tinyMsg");
 
   signature.textContent = `Te amo, ${NAME}.`;
 
@@ -242,11 +272,10 @@
   tryFetchSecureTimeOnce();
   setInterval(() => { tryFetchSecureTimeOnce(); }, 60000);
 
-  // ===== Targets (AJUSTADO A 13 FEB 3:00 PM) =====
+  // ===== Targets (13 Feb 3:00 PM) =====
   function makeTargets(n){
     const y = n.getFullYear();
-
-    const teaser  = new Date(y, 1, 13, 15, 0, 0);   // ✅ 13 Feb 3:00 PM
+    const teaser  = new Date(y, 1, 13, 15, 0, 0);   // 13 Feb 3:00 PM
     const final   = new Date(y, 1, 14, 0, 0, 0);    // 14 Feb 00:00
     const preOpen = new Date(y, 1, 14, 14, 20, 0);  // 14 Feb 2:20 PM
 
@@ -371,6 +400,12 @@
   // ===== Fases =====
   let phase = "locked"; // locked | teaser | final | preopen
 
+  function showTiny(){
+    tinyMsg.classList.add("show");
+    clearTimeout(showTiny._t);
+    showTiny._t = setTimeout(() => tinyMsg.classList.remove("show"), 3500);
+  }
+
   function setPhase(newPhase){
     if(phase === newPhase) return;
     phase = newPhase;
@@ -381,16 +416,18 @@
       wrapper.classList.remove("open");
       musicBtn.style.display = "none";
       statusPill.textContent = "💌 Carta sellada";
+      tinyMsg.classList.remove("show");
     }
 
     if(phase === "teaser"){
       setBackground("teaser");
       stampText.style.display = "inline-flex";
       stampText.textContent = "¿Estás lista? ¿Me amas? 💖";
-      wrapper.classList.remove("open");
+      wrapper.classList.remove("open"); // ✅ NO abre carta
       statusPill.textContent = "🌙 ¿Estás lista?";
       showOverlay("💖", "Toca para entrar…", "Entrar ✨");
       musicBtn.style.display = "inline-block";
+      tinyMsg.classList.remove("show");
     }
 
     if(phase === "final"){
@@ -407,6 +444,7 @@
         showOverlay("🌹", "Toca para abrir y escuchar la canción.", "Abrir 💌");
       }
       countPill.textContent = "✨";
+      tinyMsg.classList.remove("show");
     }
 
     if(phase === "preopen"){
@@ -416,6 +454,7 @@
       statusPill.textContent = "✨ Ya casi…";
       musicBtn.style.display = "inline-block";
 
+      // pre-apertura romántica (sin romper)
       wrapper.classList.add("open");
       setTimeout(()=> wrapper.classList.remove("open"), 1400);
       setTimeout(()=> wrapper.classList.add("open"), 2600);
@@ -423,14 +462,31 @@
 
       startSparkles();
       countPill.textContent = "💖";
+      tinyMsg.classList.remove("show");
     }
   }
 
-  envelopeArea.addEventListener("click", () => {
+  // ✅ Click teaser: NO abre carta, solo "nudge" + mensaje tierno
+  envelopeArea.addEventListener("click", async () => {
     if(phase === "teaser"){
-      wrapper.classList.toggle("open");
-      setTimeout(() => wrapper.classList.remove("open"), 1800);
-      if(!userGestureUnlocked) showOverlay("💖", "Toca el botón para continuar.", "Entrar ✨");
+      wrapper.classList.remove("open"); // nunca abrir carta aquí
+
+      // quitamos overlay si estorba
+      if(overlay.style.display === "grid") hideOverlay();
+
+      // animación del sobre
+      envelopeArea.classList.remove("nudge");
+      void envelopeArea.offsetWidth;
+      envelopeArea.classList.add("nudge");
+
+      // mensaje tierno
+      showTiny();
+
+      // desbloqueo audio (en mute) para evitar bloqueos
+      userGestureUnlocked = true;
+      musicBtn.style.display = "inline-block";
+      await initPlayer();
+      try{ player.setVolume(0); player.playVideo(); }catch{}
     }
   });
 
