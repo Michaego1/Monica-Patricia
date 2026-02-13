@@ -75,7 +75,7 @@
     user-select:none;
   }
 
-  /* TEXTO SOBRE (fase 8pm) */
+  /* TEXTO SOBRE */
   .stamp-text{
     position:absolute;
     left:50%; top:16%;
@@ -109,20 +109,10 @@
     background-image: url("https://www.transparenttextures.com/patterns/old-paper.png");
     border: 1px solid rgba(0,0,0,.10);
   }
-  .letter h2{
-    margin:0 0 10px;
-    font-size:20px;
-  }
+  .letter h2{ margin:0 0 10px; font-size:20px; }
   .letter p{ margin: 10px 0; }
-  .signature{
-    margin-top:14px;
-    font-weight:900;
-  }
-  .sigline{
-    margin-top:4px;
-    font-style:italic;
-    opacity:.92;
-  }
+  .signature{ margin-top:14px; font-weight:900; }
+  .sigline{ margin-top:4px; font-style:italic; opacity:.92; }
 
   /* ESTADOS */
   .open .flap{ transform: rotateX(180deg); }
@@ -210,6 +200,22 @@
     }
   }
 
+  /* BRILLOS / CORAZONES (fase 2:20) */
+  .sparkle{
+    position:absolute;
+    top:-20px;
+    font-size:16px;
+    animation: sparkleFall linear forwards;
+    pointer-events:none;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+  }
+  @keyframes sparkleFall{
+    to{
+      transform: translateY(112vh) rotate(720deg);
+      opacity:0;
+    }
+  }
+
   /* YT oculto */
   #ytwrap{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
 </style>
@@ -273,14 +279,7 @@
   // CONFIG
   // ==============================
   const NAME = "Mónica Patricia";
-
-  // Poné aquí el ID del YouTube exacto (después de v=)
-  // Ejemplo: https://www.youtube.com/watch?v=XXXX -> YT_VIDEO_ID="XXXX"
   const YT_VIDEO_ID = "Vk-A6jLTOmM";
-
-  // Fechas objetivo (hora Guatemala)
-  // Intermedio: 13 feb 20:00
-  // Final:      14 feb 00:00
   const TZ_API = "https://worldtimeapi.org/api/timezone/America/Guatemala";
 
   const wrapper = document.getElementById("wrapper");
@@ -306,21 +305,25 @@
       const data = await res.json();
       return new Date(data.datetime);
     }catch(e){
-      // fallback: si no hay internet o falla API, usamos reloj local (menos seguro)
-      return new Date();
+      return new Date(); // fallback (menos seguro si falla API)
     }
   }
 
   function makeTargets(now){
     const y = now.getFullYear();
-    const teaser = new Date(y, 1, 13, 20, 0, 0); // Feb=1
-    const final  = new Date(y, 1, 14, 0, 0, 0);
-    // Si ya pasó final, apuntamos al siguiente año
-    if(now > final){
+
+    const teaser  = new Date(y, 1, 13, 20, 0, 0); // 13 Feb 8:00 PM
+    const final   = new Date(y, 1, 14, 0, 0, 0);  // 14 Feb 00:00
+    const preOpen = new Date(y, 1, 14, 14, 20, 0); // 14 Feb 2:20 PM
+
+    // Si ya pasó preOpen, se prepara para el siguiente año
+    if(now > preOpen){
       teaser.setFullYear(y + 1);
       final.setFullYear(y + 1);
+      preOpen.setFullYear(y + 1);
     }
-    return { teaser, final };
+
+    return { teaser, final, preOpen };
   }
 
   function fmtCountdown(ms){
@@ -335,7 +338,6 @@
   // FONDO
   // ==============================
   function setBackground(mode){
-    // mode: "locked" | "teaser" | "final"
     if(mode === "locked") document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgA");
     if(mode === "teaser") document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgB");
     if(mode === "final")  document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue("--bgC");
@@ -357,6 +359,24 @@
       document.body.appendChild(p);
       setTimeout(() => p.remove(), 12000);
     }, 220);
+  }
+
+  // ==============================
+  // BRILLOS (fase 2:20)
+  // ==============================
+  let sparkleTimer = null;
+  function startSparkles(){
+    if(sparkleTimer) return;
+    sparkleTimer = setInterval(() => {
+      const sp = document.createElement("div");
+      sp.className = "sparkle";
+      sp.textContent = Math.random() > 0.5 ? "✨" : "💖";
+      sp.style.left = (Math.random()*100) + "vw";
+      sp.style.fontSize = (12 + Math.random()*16) + "px";
+      sp.style.animationDuration = (4 + Math.random()*5) + "s";
+      document.body.appendChild(sp);
+      setTimeout(() => sp.remove(), 10000);
+    }, 180);
   }
 
   // ==============================
@@ -386,9 +406,7 @@
         autoplay: 0, controls: 0, rel: 0, modestbranding: 1
       },
       events: {
-        onReady: () => {
-          try{ player.setVolume(0); }catch{}
-        },
+        onReady: () => { try{ player.setVolume(0); }catch{} },
         onStateChange: (e) => {
           if(e.data === 1){ isPlaying = true; musicBtn.textContent = "⏸ Pausar"; }
           if(e.data === 2){ isPlaying = false; musicBtn.textContent = "🎵 Reproducir"; }
@@ -427,18 +445,15 @@
     overlayBtn.textContent = btnText;
     overlay.style.display = "grid";
   }
-  function hideOverlay(){
-    overlay.style.display = "none";
-  }
+  function hideOverlay(){ overlay.style.display = "none"; }
 
   overlayBtn.addEventListener("click", async () => {
     userGestureUnlocked = true;
     hideOverlay();
-    // si estamos en teaser, iniciamos el player en mute para que en medianoche podamos subir volumen
     await initPlayer();
     try{
       player.setVolume(0);
-      player.playVideo();
+      player.playVideo(); // se queda corriendo en mute
     }catch{}
     musicBtn.style.display = "inline-block";
   });
@@ -446,7 +461,7 @@
   // ==============================
   // FASES
   // ==============================
-  let phase = "locked"; // locked | teaser | final
+  let phase = "locked"; // locked | teaser | final | preopen
 
   function setPhase(newPhase){
     if(phase === newPhase) return;
@@ -463,9 +478,9 @@
     if(phase === "teaser"){
       setBackground("teaser");
       stampText.style.display = "inline-flex";
+      stampText.textContent = "¿Estás lista? ¿Me amas? 💖";
       wrapper.classList.remove("open");
       statusPill.textContent = "🌙 Esta noche…";
-      // Pedimos toque (habilita audio y la “interacción”)
       showOverlay("💖", "¿Estás lista? Toca para entrar…", "Entrar ✨");
       musicBtn.style.display = "inline-block";
     }
@@ -474,30 +489,43 @@
       setBackground("final");
       stampText.style.display = "none";
       statusPill.textContent = "🌹 14 de febrero";
-      // Abrimos carta
       wrapper.classList.add("open");
       startPetals();
-      // Música: si ya hubo toque antes (teaser), subimos volumen sin molestar
-      // si no hubo, mostramos overlay para que toque y arranque.
+
       if(userGestureUnlocked){
         playMusic(70);
         musicBtn.style.display = "inline-block";
       }else{
         showOverlay("🌹", "Toca para abrir y escuchar la canción.", "Abrir 💌");
-        // Al tocar overlay, ya iniciaremos player (en el handler)
       }
       countPill.textContent = "✨";
     }
+
+    if(phase === "preopen"){
+      setBackground("final");
+      stampText.style.display = "inline-flex";
+      stampText.textContent = "Ya pronto, mi amor… 💖";
+      statusPill.textContent = "✨ Ya casi…";
+      musicBtn.style.display = "inline-block";
+
+      // “pre-apertura” romántica (abre/cierra un poquito)
+      wrapper.classList.add("open");
+      setTimeout(()=> wrapper.classList.remove("open"), 1400);
+      setTimeout(()=> wrapper.classList.add("open"), 2600);
+      setTimeout(()=> wrapper.classList.remove("open"), 3800);
+
+      // Brillitos + corazones
+      startSparkles();
+
+      countPill.textContent = "💖";
+    }
   }
 
-  // Acción intermedia: permitir abrir una mini-nota (opcional)
+  // Acción intermedia: mini animación al tocar el sobre en teaser
   envelopeArea.addEventListener("click", async () => {
     if(phase === "teaser"){
-      // mini-animación de “casi abrir” + texto
       wrapper.classList.toggle("open");
-      // Mantener cerrada la carta real (si se abrió, la cerramos a los 2s)
       setTimeout(() => wrapper.classList.remove("open"), 1800);
-      // si no han tocado overlay, lo pedimos
       if(!userGestureUnlocked) showOverlay("💖", "Toca el botón para continuar.", "Entrar ✨");
     }
   });
@@ -511,17 +539,17 @@
     const now = await getRealNow();
     if(!targets) targets = makeTargets(now);
 
-    const { teaser, final } = targets;
+    const { teaser, final, preOpen } = targets;
 
+    // 1) Antes del 13 Feb 20:00
     if(now < teaser){
       setPhase("locked");
-      countPill.textContent = "Se abre mañana 8:00 PM";
-      // Contador hacia teaser
       const diff = teaser - now;
       countPill.textContent = `⏳ ${fmtCountdown(diff)} (para la noche)`;
       return setTimeout(loop, 1000);
     }
 
+    // 2) 13 Feb 20:00 -> 14 Feb 00:00
     if(now >= teaser && now < final){
       setPhase("teaser");
       const diff = final - now;
@@ -529,16 +557,22 @@
       return setTimeout(loop, 1000);
     }
 
-    if(now >= final){
+    // 3) 14 Feb 00:00 -> 14 Feb 14:20 (carta abierta)
+    if(now >= final && now < preOpen){
       setPhase("final");
-      return; // ya no necesitamos seguir
+      return setTimeout(loop, 3000);
+    }
+
+    // 4) 14 Feb 14:20 en adelante (fase “ya pronto”)
+    if(now >= preOpen){
+      setPhase("preopen");
+      return;
     }
   }
 
   // ==============================
   // DISUASIÓN DEVTOOLS (no es 100% bloqueable)
   // ==============================
-  // Nota: esto solo dificulta, no hace imposible ver el código.
   document.addEventListener("contextmenu", (e) => e.preventDefault());
   document.addEventListener("keydown", (e) => {
     const k = (e.key || "").toLowerCase();
@@ -547,15 +581,10 @@
     if (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c")) e.preventDefault();
   });
 
-  // detección simple: si devtools se abre, oscurece (solo disuasión)
   const devCheck = () => {
     const t = 160;
     const open = (window.outerWidth - window.innerWidth > t) || (window.outerHeight - window.innerHeight > t);
-    if(open){
-      document.body.style.filter = "blur(8px)";
-    }else{
-      document.body.style.filter = "none";
-    }
+    document.body.style.filter = open ? "blur(8px)" : "none";
   };
   setInterval(devCheck, 900);
 
