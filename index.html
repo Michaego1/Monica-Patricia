@@ -14,6 +14,10 @@
       --paper: #fdf5e6;
       --ink: #3b2b20;
     }
+    html{
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
     body{
       margin:0;
       min-height:100vh;
@@ -289,13 +293,16 @@
 
     /* ✅ Ajustes finos para móvil en la carta final */
     @media (max-width: 520px){
+
       .letter{
         line-height: 1.65;
-        font-size: 15px;
+        font-size: 16px; /* ✅ evita auto-zoom */
       }
+
       .letter h2{
         font-size: 20px;
       }
+
       .quote{
         font-size: 15px;
         padding: 12px 12px;
@@ -306,18 +313,25 @@
         margin: 10px 0 6px;
       }
 
-      /* Galería más cómoda en teléfono */
+      /* galería móvil */
       .gallery{
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
 
-      /* ✅ en móvil, mejor cuadradas para que no se corten raro */
+      /* fotos cuadradas */
       .ph img{
         height: auto;
         aspect-ratio: 1 / 1;
         object-fit: cover;
       }
+
+      /* 🔥 evita salto/zoom al entrar fullscreen */
+      .fullscreen .letter{
+        transition: none !important;
+        transform: none !important;
+      }
+
     }
 
     /* ✅ teléfonos muy pequeños: 1 columna */
@@ -686,6 +700,11 @@
         // ✅ aquí SÍ van estas dos líneas
         wrapper.classList.add("fullscreen");
         wrapper.classList.add("open");
+        // evita salto visual en móvil
+        requestAnimationFrame(() => {
+          const letter = document.getElementById("letter");
+          if(letter) letter.scrollTop = 0;
+        });
 
         startPetals();
 
