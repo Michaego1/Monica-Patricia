@@ -292,9 +292,10 @@
       transform: translateY(0);
     }
 
-    /* ✅ Ajustes finos para móvil en la carta final */
+    </* ✅ Ajustes finos para MÓVIL */
     @media (max-width: 520px){
 
+      /* General (todas las fases) */
       .letter{
         line-height: 1.65;
         font-size: 16px; /* ✅ evita auto-zoom */
@@ -327,12 +328,33 @@
         object-fit: cover;
       }
 
-      /* 🔥 evita salto/zoom al entrar fullscreen */
+      /* 🔥 SOLO EN FINAL FULLSCREEN: que no se vea “alejado” */
       .fullscreen .letter{
         transition: none !important;
         transform: none !important;
+
+        font-size: 18px !important;       /* ✅ más grande en final */
+        line-height: 1.7 !important;
+
+        text-align: left !important;      /* ✅ más legible */
+        padding-left: 16px !important;
+        padding-right: 16px !important;
       }
 
+      .fullscreen .letter h2{
+        text-align: center !important;
+        font-size: 22px !important;
+      }
+
+      .fullscreen .quote{
+        text-align: center !important;    /* romántico centrado */
+        font-size: 17px !important;
+      }
+
+      .fullscreen .mm-title{
+        text-align: center !important;
+        font-size: 54px !important;
+      }
     }
 
     /* ✅ teléfonos muy pequeños: 1 columna */
