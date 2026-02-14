@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <!-- ✅ viewport limpio (sin bloquear zoom, evita bugs raros de “acercado”) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Para Mónica Patricia 💌</title>
   <meta name="theme-color" content="#120013" />
 
@@ -13,22 +14,26 @@
       --bgC: radial-gradient(circle at 40% 25%, #6b0f2c, #170014 55%, #030003);
       --paper: #fdf5e6;
       --ink: #3b2b20;
+
+      /* ✅ fallback si JS aún no setea --vh */
+      --vh: 1vh;
     }
+
     html{
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
     }
+
     body{
-      
       margin:0;
-      min-height:100vh;
-      min-height:100dvh;              /* ✅ móvil moderno */
+      min-height: calc(var(--vh) * 100); /* ✅ fix móvil (evita “zoom” raro) */
       overflow:hidden;
       display:flex; align-items:center; justify-content:center;
       background: var(--bgA);
       color:#fff; font-family:"Georgia", serif;
       transition: background 1.2s ease;
     }
+
     .wrapper{ text-align:center; position:relative; width:min(980px, 94vw); padding:14px; }
 
     .envelope-area{ position:relative; width:360px; height:250px; margin:0 auto; transform: translateZ(0); }
@@ -90,15 +95,11 @@
     .signature{ margin-top:16px; font-weight:900; }
     .sigline{ margin-top:6px; font-style:italic; opacity:.92; }
 
-    /* OJO: Esto se usa para modo "sobre/card" normal (no fullscreen) */
+    /* Modo “sobre” */
     .open .flap{ transform: rotateX(180deg); }
     .open:not(.fullscreen) .letter{ transform: translate(-50%, -152%); }
 
-    /* Bloques dentro de la carta */
-    .section{
-      margin: 14px auto;
-      width: min(820px, 100%);
-    }
+    .section{ margin: 14px auto; width: min(820px, 100%); }
     .quote{
       margin: 10px auto 0;
       padding: 14px 14px;
@@ -108,7 +109,7 @@
       font-size: 16px;
     }
 
-    /* ✅ Título grande M&M */
+    /* Título grande M&M */
     .mm-title{
       margin: 12px 0 10px;
       font-size: clamp(34px, 6vw, 56px);
@@ -128,10 +129,7 @@
       background: #000;
       box-shadow: 0 10px 30px rgba(0,0,0,.18);
     }
-    .video video{
-      width:100%;
-      display:block;
-    }
+    .video video{ width:100%; display:block; }
 
     /* Galería */
     .gallery{
@@ -229,7 +227,6 @@
     }
     @keyframes sparkleFall{ to{ transform: translateY(112vh) rotate(720deg); opacity:0; } }
 
-    /* Teaser nudge */
     .nudge{ animation: nudge 0.8s ease; }
     @keyframes nudge{
       0%{ transform: translateY(0) rotate(0); }
@@ -242,7 +239,7 @@
 
     #ytwrap{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
 
-    /* ====== MODO PANTALLA COMPLETA PARA EL 14 (MOBILE FRIENDLY) ====== */
+    /* ====== FULLSCREEN FINAL (MÓVIL FRIENDLY) ====== */
     .fullscreen{
       width: 100vw !important;
       padding: 0 !important;
@@ -250,12 +247,10 @@
 
     .fullscreen .envelope-area{
       width: 100vw;
-      height: 100vh;
-      height: 100dvh;                 /* ✅ */
+      height: calc(var(--vh) * 100); /* ✅ */
       margin: 0;
     }
 
-    /* ocultamos el sobre en modo final */
     .fullscreen .envelope,
     .fullscreen .flap,
     .fullscreen .seal,
@@ -263,19 +258,16 @@
       display: none !important;
     }
 
-    /* ✅ La carta ocupa TODA la pantalla y respeta notch */
     .fullscreen .letter{
       position: fixed;
       inset: 0;
       width: 100vw;
-      height: 100vh;
-      height: 100dvh;                 /* ✅ evita que se “coma” contenido */
+      height: calc(var(--vh) * 100); /* ✅ */
       max-height: none;
 
       transform: translateY(110%);
       border-radius: 0;
 
-      /* ✅ safe areas + padding pro */
       padding-top: calc(18px + env(safe-area-inset-top));
       padding-right: 14px;
       padding-left: 14px;
@@ -283,81 +275,37 @@
 
       overflow: auto;
       -webkit-overflow-scrolling: touch;
-
-      /* ✅ evita “saltos” raros de scroll */
       overscroll-behavior: contain;
     }
 
-    .fullscreen.open .letter{
-      transform: translateY(0);
-    }
+    .fullscreen.open .letter{ transform: translateY(0); }
 
-    </* ✅ Ajustes finos para MÓVIL */
+    /* ✅ Ajustes finos para MÓVIL */
     @media (max-width: 520px){
-
-      /* General (todas las fases) */
       .letter{
         line-height: 1.65;
         font-size: 16px; /* ✅ evita auto-zoom */
       }
-
-      .letter h2{
-        font-size: 20px;
-      }
-
-      .quote{
-        font-size: 15px;
-        padding: 12px 12px;
-      }
+      .letter h2{ font-size: 20px; }
+      .quote{ font-size: 15px; padding: 12px; }
 
       .mm-title{
         font-size: clamp(34px, 10vw, 52px);
         margin: 10px 0 6px;
       }
 
-      /* galería móvil */
       .gallery{
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
 
-      /* fotos cuadradas */
       .ph img{
         height: auto;
         aspect-ratio: 1 / 1;
         object-fit: cover;
       }
-
-      /* 🔥 SOLO EN FINAL FULLSCREEN: que no se vea “alejado” */
-      .fullscreen .letter{
-        transition: none !important;
-        transform: none !important;
-
-        font-size: 18px !important;       /* ✅ más grande en final */
-        line-height: 1.7 !important;
-
-        text-align: left !important;      /* ✅ más legible */
-        padding-left: 16px !important;
-        padding-right: 16px !important;
-      }
-
-      .fullscreen .letter h2{
-        text-align: center !important;
-        font-size: 22px !important;
-      }
-
-      .fullscreen .quote{
-        text-align: center !important;    /* romántico centrado */
-        font-size: 17px !important;
-      }
-
-      .fullscreen .mm-title{
-        text-align: center !important;
-        font-size: 54px !important;
-      }
     }
 
-    /* ✅ teléfonos muy pequeños: 1 columna */
     @media (max-width: 360px){
       .gallery{ grid-template-columns: 1fr; }
     }
@@ -377,29 +325,24 @@
     <div class="letter" id="letter">
       <h2>Para Mónica Patricia 💖</h2>
 
-      <div class="section quote" id="loveText">
-        <!-- texto se inyecta por JS para que quede exacto -->
-      </div>
+      <div class="section quote" id="loveText"></div>
 
-      <!-- ✅ M&M grande antes de las fotos -->
       <div class="section">
         <div class="mm-title">M&amp;M</div>
       </div>
 
-      <!-- ✅ Fotos primero -->
       <div class="section">
         <h3 style="margin:10px 0 10px;">Nosotros 📸</h3>
         <div class="gallery" id="gallery"></div>
       </div>
 
-      <!-- ✅ Video abajo de las fotos -->
       <div class="section">
-        <h3 style="margin:14px 0 10px;">Por mas 14 de febrero juntos! 🎥</h3>
+        <h3 style="margin:14px 0 10px;">¡Por más 14 de febrero juntos! 🎥</h3>
         <div class="video">
           <video id="loveVideo" controls playsinline preload="metadata"></video>
         </div>
         <div style="font-size:13px;opacity:.8;margin-top:8px;">
-          Mereces esto y mucho más hermosa mujer!
+          Mereces esto y mucho más, hermosa mujer.
         </div>
       </div>
 
@@ -429,15 +372,22 @@
 
 <script>
   (() => {
+    // ✅ Fix 100vh móvil (evita “acercado” raro)
+    function setVh(){
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    setVh();
+    window.addEventListener('resize', setVh);
+    window.addEventListener('orientationchange', setVh);
+
     // ========= CONFIG =========
     const NAME = "Mónica Patricia";
     const YT_VIDEO_ID = "Vk-A6jLTOmM"; // tu canción (YouTube oculto)
 
-    // ✅ Tu video local (más confiable que YouTube para "tu video")
-    const VIDEO_SRC = "assets/video.mp4";   // <-- pon tu archivo aquí
-    const VIDEO_POSTER = "";                // opcional: "assets/portada.jpg"
+    const VIDEO_SRC = "assets/video.mp4";
+    const VIDEO_POSTER = "";
 
-    // ✅ Lista de fotos (pon todas las que quieras)
     const ASSET_PHOTOS = [
       "assets/foto1.jpg",
       "assets/foto2.jpg",
@@ -457,14 +407,15 @@
     ];
 
     const LOVE_MESSAGE = `
-    Eres mi persona favorita, eres mi princesa y más hermosa que todas las de Disney, la mujer de mis oraciones,
-    definitivamente la mujer de mis sueños. Quién diría que nuestras almas se conocerían y encajarían tan perfecto. Hace un año ni me imaginaba
-    estar así de enamorado. Cada día, desde que te conocí, me enamoro más y más, y sé que este amor apenas empieza.
-    <br><br>
-    La distancia tan solo es una piedra fea del camino, pero nuestro amor tiene unas grandes llantas
-    de tractor que les pasará encima a cada piedra fea y odiosa.<br><br>
-    Te amo, Mónica Patricia. 💖
-  `;
+      Eres mi persona favorita, eres mi princesa y más hermosa que todas las de Disney, la mujer de mis oraciones,
+      definitivamente la mujer de mis sueños. Quién diría que nuestras almas se conocerían y encajarían tan perfecto.
+      Hace un año ni me imaginaba estar así de enamorado. Cada día, desde que te conocí, me enamoro más y más, y sé que este amor apenas empieza.
+      <br><br>
+      La distancia tan solo es una piedra fea del camino, pero nuestro amor tiene unas grandes llantas
+      de tractor que les pasará encima a cada piedra fea y odiosa.
+      <br><br>
+      Te amo, Mónica Patricia. 💖
+    `;
 
     // ========= ELEMENTOS =========
     const wrapper = document.getElementById("wrapper");
@@ -489,11 +440,9 @@
     signature.textContent = `Te amo, ${NAME}.`;
     loveText.innerHTML = LOVE_MESSAGE;
 
-    // Video local
     loveVideo.src = VIDEO_SRC;
     if (VIDEO_POSTER) loveVideo.poster = VIDEO_POSTER;
 
-    // Galería
     function buildGallery(){
       gallery.innerHTML = "";
       for(const src of ASSET_PHOTOS){
@@ -514,10 +463,9 @@
       }
     }
     buildGallery();
-
     lightbox.addEventListener("click", () => lightbox.classList.remove("open"));
 
-    // ========= TIEMPO (no bloquea) =========
+    // ========= TIEMPO =========
     let secureBase = null;
     let secureBaseLocalTs = 0;
 
@@ -560,9 +508,6 @@
     setInterval(() => { tryFetchSecureTimeOnce(); }, 60000);
 
     // ========= FECHAS =========
-    // Teaser: 13 Feb 3:00 PM
-    // Final:  14 Feb 00:00
-    // PreOpen:14 Feb 2:20 PM
     function makeTargets(n){
       const y = n.getFullYear();
       const teaser  = new Date(y, 1, 13, 15, 0, 0);
@@ -689,13 +634,12 @@
     });
 
     // ========= FASES =========
-    let phase = "locked"; // locked | teaser | final | preopen
+    let phase = "locked";
 
     function setPhase(newPhase){
       if(phase === newPhase) return;
       phase = newPhase;
 
-      // ✅ reset general (para no arrastrar estilos entre fases)
       wrapper.classList.remove("fullscreen");
       wrapper.classList.remove("open");
 
@@ -720,10 +664,9 @@
         stampText.style.display = "none";
         statusPill.textContent = "🌹 14 de febrero";
 
-        // ✅ aquí SÍ van estas dos líneas
         wrapper.classList.add("fullscreen");
         wrapper.classList.add("open");
-        // evita salto visual en móvil
+
         requestAnimationFrame(() => {
           const letter = document.getElementById("letter");
           if(letter) letter.scrollTop = 0;
@@ -747,7 +690,6 @@
         statusPill.textContent = "✨ Ya casi…";
         musicBtn.style.display = "inline-block";
 
-        // (si querés mantener la animación del sobre, aquí podés volver a abrir/cerrar)
         wrapper.classList.add("open");
         setTimeout(()=> wrapper.classList.remove("open"), 1400);
         setTimeout(()=> wrapper.classList.add("open"), 2600);
@@ -758,7 +700,6 @@
       }
     }
 
-    // Click teaser: NO abre carta, solo nudge + habilita audio mute
     envelopeArea.addEventListener("click", async () => {
       if(phase === "teaser"){
         wrapper.classList.remove("open");
@@ -778,7 +719,6 @@
     // ========= LOOP =========
     let targets = null;
     function loop(){
-      // ===== MODO PRUEBA POR URL =====
       const qp = new URLSearchParams(location.search);
       const test = (qp.get("test") || "").toLowerCase();
       if (test) {
