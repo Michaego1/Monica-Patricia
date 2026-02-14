@@ -15,7 +15,10 @@
       --ink: #3b2b20;
     }
     body{
-      margin:0; height:100vh; overflow:hidden;
+      margin:0;
+      min-height:100vh;
+      min-height:100dvh;              /* ✅ móvil moderno */
+      overflow:hidden;
       display:flex; align-items:center; justify-content:center;
       background: var(--bgA);
       color:#fff; font-family:"Georgia", serif;
@@ -234,41 +237,92 @@
 
     #ytwrap{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
 
-    /* ====== MODO PANTALLA COMPLETA PARA EL 14 ====== */
+    /* ====== MODO PANTALLA COMPLETA PARA EL 14 (MOBILE FRIENDLY) ====== */
     .fullscreen{
       width: 100vw !important;
       padding: 0 !important;
     }
+
     .fullscreen .envelope-area{
       width: 100vw;
       height: 100vh;
+      height: 100dvh;                 /* ✅ */
       margin: 0;
     }
+
+    /* ocultamos el sobre en modo final */
     .fullscreen .envelope,
     .fullscreen .flap,
     .fullscreen .seal,
     .fullscreen .stamp-text{
-      display: none !important; /* ocultamos el sobre en modo final */
+      display: none !important;
     }
+
+    /* ✅ La carta ocupa TODA la pantalla y respeta notch */
     .fullscreen .letter{
       position: fixed;
       inset: 0;
-      left: 0;
-      top: 0;
-
       width: 100vw;
       height: 100vh;
+      height: 100dvh;                 /* ✅ evita que se “coma” contenido */
       max-height: none;
 
-      transform: translateY(110%); /* inicia abajo */
+      transform: translateY(110%);
       border-radius: 0;
-      padding: 26px 18px 34px;
+
+      /* ✅ safe areas + padding pro */
+      padding-top: calc(18px + env(safe-area-inset-top));
+      padding-right: 14px;
+      padding-left: 14px;
+      padding-bottom: calc(26px + env(safe-area-inset-bottom));
 
       overflow: auto;
       -webkit-overflow-scrolling: touch;
+
+      /* ✅ evita “saltos” raros de scroll */
+      overscroll-behavior: contain;
     }
+
     .fullscreen.open .letter{
       transform: translateY(0);
+    }
+
+    /* ✅ Ajustes finos para móvil en la carta final */
+    @media (max-width: 520px){
+      .letter{
+        line-height: 1.65;
+        font-size: 15px;
+      }
+      .letter h2{
+        font-size: 20px;
+      }
+      .quote{
+        font-size: 15px;
+        padding: 12px 12px;
+      }
+
+      .mm-title{
+        font-size: clamp(34px, 10vw, 52px);
+        margin: 10px 0 6px;
+      }
+
+      /* Galería más cómoda en teléfono */
+      .gallery{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      /* ✅ en móvil, mejor cuadradas para que no se corten raro */
+      .ph img{
+        height: auto;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+      }
+    }
+
+    /* ✅ teléfonos muy pequeños: 1 columna */
+    @media (max-width: 360px){
+      .gallery{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -604,21 +658,21 @@
       if(phase === newPhase) return;
       phase = newPhase;
 
+      // ✅ reset general (para no arrastrar estilos entre fases)
+      wrapper.classList.remove("fullscreen");
+      wrapper.classList.remove("open");
+
       if(phase === "locked"){
-        wrapper.classList.remove("fullscreen");
         setBackground("locked");
         stampText.style.display = "none";
-        wrapper.classList.remove("open");
         musicBtn.style.display = "none";
         statusPill.textContent = "💌 Carta sellada";
       }
 
       if(phase === "teaser"){
-        wrapper.classList.remove("fullscreen");
         setBackground("teaser");
         stampText.style.display = "inline-flex";
         stampText.textContent = "¿Estás lista? ¿Me amas? 💖";
-        wrapper.classList.remove("open"); // NO abrir carta
         statusPill.textContent = "🌙 ¿Estás lista?";
         showOverlay("💖", "Toca para entrar…", "Entrar ✨");
         musicBtn.style.display = "inline-block";
@@ -629,7 +683,7 @@
         stampText.style.display = "none";
         statusPill.textContent = "🌹 14 de febrero";
 
-        // ✅ Pantalla completa: mostrar TODO (texto + fotos + video)
+        // ✅ aquí SÍ van estas dos líneas
         wrapper.classList.add("fullscreen");
         wrapper.classList.add("open");
 
@@ -639,20 +693,19 @@
           playMusic(70);
           musicBtn.style.display = "inline-block";
         }else{
-          showOverlay("🌹", "Lo siento por la espera, con tu paciencia fue dificil...", "Abrir 💌");
+          showOverlay("🌹", "Lo siento por la espera, con tu paciencia fue difícil...", "Abrir 💌");
         }
         countPill.textContent = "✨";
       }
 
       if(phase === "preopen"){
-        wrapper.classList.remove("fullscreen");
         setBackground("final");
         stampText.style.display = "inline-flex";
         stampText.textContent = "Ya pronto, mi amor… 💖";
         statusPill.textContent = "✨ Ya casi…";
         musicBtn.style.display = "inline-block";
 
-        // animación romántica (solo sobre, no fullscreen)
+        // (si querés mantener la animación del sobre, aquí podés volver a abrir/cerrar)
         wrapper.classList.add("open");
         setTimeout(()=> wrapper.classList.remove("open"), 1400);
         setTimeout(()=> wrapper.classList.add("open"), 2600);
