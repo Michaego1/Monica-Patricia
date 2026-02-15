@@ -746,13 +746,10 @@
 
       if(n >= final && n < preOpen){
         setPhase("final");
-        return setTimeout(loop, 3000);
-      }
-
-      if(n >= preOpen){
-        setPhase("preopen");
         return;
       }
+
+    
     }
 
     setBackground("locked");
