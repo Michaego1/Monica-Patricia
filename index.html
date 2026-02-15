@@ -719,37 +719,37 @@
     // ========= LOOP =========
     let targets = null;
     function loop(){
-      const qp = new URLSearchParams(location.search);
-      const test = (qp.get("test") || "").toLowerCase();
-      if (test) {
-        if (test === "locked")  { setPhase("locked");  countPill.textContent = "🧪 Modo prueba: locked"; return; }
-        if (test === "teaser")  { setPhase("teaser");  countPill.textContent = "🧪 Modo prueba: teaser"; return; }
-        if (test === "final")   { setPhase("final");   countPill.textContent = "🧪 Modo prueba: final"; return; }
-        if (test === "preopen") { setPhase("preopen"); countPill.textContent = "🧪 Modo prueba: preopen"; return; }
-      }
+  // 🧪 MODO PRUEBA
+  const qp = new URLSearchParams(location.search);
+  const test = (qp.get("test") || "").toLowerCase();
+  if (test) {
+    if (test === "locked")  { setPhase("locked");  countPill.textContent = "🧪 locked"; return; }
+    if (test === "teaser")  { setPhase("teaser");  countPill.textContent = "🧪 teaser"; return; }
+    if (test === "final")   { setPhase("final");   countPill.textContent = "🧪 final"; return; }
+  }
 
-      const n = nowGT();
-      if(!targets) targets = makeTargets(n);
-      const { teaser, final, preOpen } = targets;
+  const n = nowGT();
+  if(!targets) targets = makeTargets(n);
+  const { teaser, final } = targets;
 
-      if(n < teaser){
-        setPhase("locked");
-        countPill.textContent = `⏳ ${fmtCountdown(teaser - n)} (para las 3:00 PM)`;
-        return setTimeout(loop, 1000);
-      }
+  if(n < teaser){
+    setPhase("locked");
+    countPill.textContent = `⏳ ${fmtCountdown(teaser - n)} (para las 3:00 PM)`;
+    return setTimeout(loop, 1000);
+  }
 
-      if(n >= teaser && n < final){
-        setPhase("teaser");
-        countPill.textContent = `⏳ ${fmtCountdown(final - n)} (para medianoche)`;
-        return setTimeout(loop, 1000);
-      }
+  if(n >= teaser && n < final){
+    setPhase("teaser");
+    countPill.textContent = `⏳ ${fmtCountdown(final - n)} (para medianoche)`;
+    return setTimeout(loop, 1000);
+  }
 
-      if(n >= final && n < preOpen){
-        setPhase("final");
-        return;
-      }
-
-    
+  // 🌹 FINAL PARA SIEMPRE 🌹
+  if(n >= final){
+    setPhase("final");
+    countPill.textContent = "💖";
+    return; // 👈 se queda aquí para siempre
+  }
     }
 
     setBackground("locked");
